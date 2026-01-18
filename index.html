@@ -195,11 +195,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            cursor: grab;
-        }
-
-        #game-canvas:active {
-            cursor: grabbing;
+            cursor: default;
         }
 
         /* Игровой интерфейс */
@@ -266,74 +262,217 @@
             border: 2px solid #ff4500;
         }
 
-        /* Панель юнитов */
-        .unit-palette {
+        /* Информационная панель */
+        .info-panel {
             position: absolute;
-            left: 50%;
-            bottom: 30px;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 15px;
-            background: rgba(26, 0, 51, 0.8);
-            padding: 15px;
-            border-radius: 12px;
+            right: 20px;
+            top: 80px;
+            width: 300px;
+            background: rgba(26, 0, 51, 0.9);
             border: 2px solid #9d00ff;
-            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            padding: 20px;
             pointer-events: all;
+            backdrop-filter: blur(5px);
         }
 
-        .unit-card {
-            width: 100px;
-            height: 120px;
+        .info-title {
+            color: #9d00ff;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .info-text {
+            color: #ccc;
+            font-size: 0.9em;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+
+        .mine-status {
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(74, 0, 109, 0.3);
+            border-radius: 5px;
+        }
+
+        .mine-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(157, 0, 255, 0.3);
+        }
+
+        .mine-name {
+            color: #fff;
+            font-size: 0.9em;
+        }
+
+        .mine-value {
+            color: #00ff00;
+            font-size: 0.9em;
+        }
+
+        /* Статус юнитов */
+        .unit-status {
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(74, 0, 109, 0.3);
+            border-radius: 5px;
+        }
+
+        .unit-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(157, 0, 255, 0.3);
+        }
+
+        .unit-type {
+            color: #fff;
+            font-size: 0.9em;
+        }
+
+        .unit-count {
+            color: #00ff00;
+            font-size: 0.9em;
+        }
+
+        /* Меню строительства */
+        .build-menu {
+            position: absolute;
+            bottom: -400px;
+            left: 0;
+            width: 100%;
+            background: rgba(26, 0, 51, 0.95);
+            border-top: 3px solid #9d00ff;
+            padding: 20px;
+            transition: bottom 0.5s ease-in-out;
+            backdrop-filter: blur(10px);
+            pointer-events: all;
+            z-index: 750;
+        }
+
+        .build-menu.active {
+            bottom: 0;
+        }
+
+        .build-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #9d00ff;
+        }
+
+        .build-title {
+            font-size: 1.5em;
+            color: #9d00ff;
+        }
+
+        .close-build-btn {
+            background: linear-gradient(45deg, #9d00ff, #4a006d);
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .close-build-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #9d00ff;
+        }
+
+        .build-categories {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .category-btn {
+            background: rgba(74, 0, 109, 0.5);
+            border: 2px solid #9d00ff;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .category-btn.active {
+            background: linear-gradient(45deg, #9d00ff, #4a006d);
+            box-shadow: 0 0 15px #9d00ff;
+        }
+
+        .category-btn:hover {
+            background: rgba(157, 0, 255, 0.3);
+        }
+
+        .build-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            max-height: 250px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .build-item {
             background: linear-gradient(45deg, #2a0044, #4a006d);
             border: 2px solid #9d00ff;
             border-radius: 8px;
-            padding: 12px;
-            cursor: grab;
+            padding: 15px;
+            cursor: pointer;
             transition: all 0.3s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
+            text-align: center;
         }
 
-        .unit-card:hover {
+        .build-item:hover {
             transform: translateY(-5px);
             box-shadow: 0 5px 20px rgba(157, 0, 255, 0.5);
             background: linear-gradient(45deg, #4a006d, #9d00ff);
         }
 
-        .unit-icon {
-            width: 40px;
-            height: 40px;
-            font-size: 1.8em;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .build-item.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .build-item.disabled:hover {
+            transform: none;
+            box-shadow: none;
+            background: linear-gradient(45deg, #2a0044, #4a006d);
+        }
+
+        .build-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
             color: #00ffff;
         }
 
-        .unit-cost {
+        .build-name {
+            color: #fff;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .build-cost {
             color: gold;
-            font-size: 1em;
+            font-size: 0.9em;
             font-weight: bold;
         }
 
-        .unit-name {
-            color: #fff;
+        .build-requirements {
             font-size: 0.8em;
-            text-align: center;
-        }
-
-        .dragging {
-            opacity: 0.7;
-            transform: scale(1.1);
-            z-index: 1000;
-        }
-
-        .selected {
-            border-color: #00ff00 !important;
-            box-shadow: 0 0 15px #00ff00 !important;
+            color: #aaa;
+            margin-top: 5px;
         }
 
         /* Индикатор размещения */
@@ -450,6 +589,16 @@
             pointer-events: none;
         }
 
+        /* Индикатор выбора */
+        .selection-box {
+            position: absolute;
+            border: 2px solid #00ffff;
+            background: rgba(0, 255, 255, 0.1);
+            display: none;
+            pointer-events: none;
+            z-index: 500;
+        }
+
         /* Анимации */
         @keyframes pulse {
             0%, 100% { opacity: 1; }
@@ -471,57 +620,24 @@
             50% { transform: translateY(-10px); }
         }
 
-        /* Информационная панель */
-        .info-panel {
+        /* HP бар */
+        .hp-bar {
             position: absolute;
-            right: 20px;
-            top: 80px;
-            width: 250px;
-            background: rgba(26, 0, 51, 0.9);
-            border: 2px solid #9d00ff;
-            border-radius: 10px;
-            padding: 20px;
-            pointer-events: all;
-            backdrop-filter: blur(5px);
+            width: 40px;
+            height: 4px;
+            background: #333;
+            border: 1px solid #000;
+            border-radius: 2px;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 610;
         }
 
-        .info-title {
-            color: #9d00ff;
-            font-size: 1.2em;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .info-text {
-            color: #ccc;
-            font-size: 0.9em;
-            line-height: 1.4;
-            margin-bottom: 10px;
-        }
-
-        .mine-status {
-            margin-top: 15px;
-            padding: 10px;
-            background: rgba(74, 0, 109, 0.3);
-            border-radius: 5px;
-        }
-
-        .mine-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            padding-bottom: 5px;
-            border-bottom: 1px solid rgba(157, 0, 255, 0.3);
-        }
-
-        .mine-name {
-            color: #fff;
-            font-size: 0.9em;
-        }
-
-        .mine-value {
-            color: #00ff00;
-            font-size: 0.9em;
+        .hp-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff0000, #00ff00);
+            width: 100%;
+            transition: width 0.3s;
         }
     </style>
 </head>
@@ -579,6 +695,10 @@
                             <div class="resource-icon requisition-icon">⚙</div>
                             <span id="requisition">0/мин</span>
                         </div>
+                        <div class="resource">
+                            <div style="color: #00ffff; font-weight: bold;">Войска:</div>
+                            <span id="unit-limit">0/20</span>
+                        </div>
                     </div>
                     <div class="wave-info">
                         <div>ВОЛНА: <span id="wave">1</span></div>
@@ -586,31 +706,13 @@
                     </div>
                 </div>
 
-                <div class="unit-palette" id="unit-palette">
-                    <div class="unit-card" data-unit="skitarii" draggable="true">
-                        <div class="unit-icon">⚔</div>
-                        <div class="unit-name">Скитарий</div>
-                        <div class="unit-cost">250 Ⱡ</div>
-                    </div>
-                    <div class="unit-card" data-unit="turret" draggable="true">
-                        <div class="unit-icon">☢</div>
-                        <div class="unit-name">Турель</div>
-                        <div class="unit-cost">500 Ⱡ</div>
-                    </div>
-                    <div class="unit-card" data-unit="dreadnought" draggable="true">
-                        <div class="unit-icon">⚙</div>
-                        <div class="unit-name">Дредноут</div>
-                        <div class="unit-cost">1000 Ⱡ</div>
-                    </div>
-                </div>
-
                 <!-- Информационная панель -->
                 <div class="info-panel">
                     <div class="info-title">СТРАТЕГИЧЕСКИЙ ДИСПЛЕЙ</div>
-                    <div class="info-text">• Перетаскивайте юнитов на поле</div>
-                    <div class="info-text">• Кликните юнита для выбора</div>
-                    <div class="info-text">• Кликните на карту для перемещения</div>
-                    <div class="info-text">• Удерживайте шахты для дохода</div>
+                    <div class="info-text">• Выделение: ЛКМ + драг</div>
+                    <div class="info-text">• Перемещение: Выделить + ПКМ на карту</div>
+                    <div class="info-text">• Вращение стен: Выделить + R</div>
+                    <div class="info-text">• Меню строительства: M</div>
                     
                     <div class="mine-status">
                         <div class="mine-item">
@@ -625,6 +727,25 @@
                             <span class="mine-name">Шахта Гамма</span>
                             <span class="mine-value" id="mine-3">Свободна</span>
                         </div>
+                        <div class="mine-item">
+                            <span class="mine-name">Шахта Дельта</span>
+                            <span class="mine-value" id="mine-4">Свободна</span>
+                        </div>
+                        <div class="mine-item">
+                            <span class="mine-name">Шахта Эпсилон</span>
+                            <span class="mine-value" id="mine-5">Свободна</span>
+                        </div>
+                    </div>
+                    
+                    <div class="unit-status">
+                        <div class="unit-item">
+                            <span class="unit-type">Казармы</span>
+                            <span class="unit-count" id="barracks-count">0</span>
+                        </div>
+                        <div class="unit-item">
+                            <span class="unit-type">Стены</span>
+                            <span class="unit-count" id="walls-count">0</span>
+                        </div>
                     </div>
                     
                     <div class="info-text" style="color: #ff4500; margin-top: 10px;">
@@ -637,10 +758,33 @@
 
                 <!-- Подсказки по управлению -->
                 <div class="controls-hint">
-                    Управление камерой: WASD / Стрелки<br>
-                    Вращение камеры: Зажать колесо мыши + двигать<br>
-                    Перемещение юнитов: Выбрать + клик на карту
+                    WASD/Стрелки - движение камеры<br>
+                    Средняя кнопка + движение - вращение<br>
+                    Колесико - зум<br>
+                    M - меню строительства<br>
+                    R - вращение выбранного объекта
                 </div>
+
+                <!-- Бокс выделения -->
+                <div class="selection-box" id="selection-box"></div>
+            </div>
+        </div>
+
+        <!-- Меню строительства -->
+        <div class="build-menu" id="build-menu">
+            <div class="build-menu-header">
+                <div class="build-title">МЕНЮ СТРОИТЕЛЬСТВА</div>
+                <button class="close-build-btn" id="close-build-btn">ЗАКРЫТЬ (M)</button>
+            </div>
+            
+            <div class="build-categories" id="build-categories">
+                <button class="category-btn active" data-category="units">ВОЙСКА</button>
+                <button class="category-btn" data-category="buildings">ЗДАНИЯ</button>
+                <button class="category-btn" data-category="defenses">ОБОРОНА</button>
+            </div>
+            
+            <div class="build-items" id="build-items">
+                <!-- Содержимое будет заполняться динамически -->
             </div>
         </div>
 
@@ -738,7 +882,6 @@
                     document.getElementById('cut-scene').style.display = 'flex';
                     this.startTyping();
                     
-                    // Добавляем обработчик для кнопки пропуска
                     document.getElementById('skip-btn').addEventListener('click', () => this.skip());
                 });
             }
@@ -798,19 +941,27 @@
                 
                 this.keys = {};
                 this.mouseButtons = {};
-                this.cameraTarget = new THREE.Vector3(0, 50, 80);
-                this.cameraRotation = { x: -Math.PI / 6, y: 0 };
+                this.cameraTarget = new THREE.Vector3(0, 0, 0);
+                this.cameraPosition = new THREE.Vector3(0, 150, 200);
+                this.cameraDistance = 200;
+                this.cameraRotation = { x: -Math.PI / 4, y: 0 };
                 this.isRotating = false;
                 this.lastMousePosition = { x: 0, y: 0 };
-                this.selectedUnit = null;
-                this.draggedUnit = null;
+                this.selectedUnits = [];
+                this.dragging = false;
+                this.dragStart = { x: 0, y: 0 };
+                this.rotationMode = false;
                 
                 this.gameLoopId = null;
                 this.waveInterval = null;
                 this.economyInterval = null;
                 this.waveTimerInterval = null;
+                this.buildQueue = [];
+                this.placingBuilding = null;
+                this.currentBuildCategory = 'units';
                 
-                this.unitMeshes = new Map();
+                this.hpBars = new Map();
+                this.selectionBox = document.getElementById('selection-box');
             }
 
             static async start() {
@@ -834,7 +985,6 @@
                 if (this.economyInterval) clearInterval(this.economyInterval);
                 if (this.waveTimerInterval) clearInterval(this.waveTimerInterval);
                 
-                // Удаляем обработчики событий
                 const skipBtn = document.getElementById('skip-btn');
                 const restartBtn = document.getElementById('restart-btn');
                 if (skipBtn) {
@@ -931,21 +1081,17 @@
             async initThreeJS() {
                 return new Promise((resolve) => {
                     try {
-                        // Создаем сцену
                         this.scene = new THREE.Scene();
                         this.scene.background = new THREE.Color(0x000000);
                         
-                        // Создаем камеру
                         this.camera = new THREE.PerspectiveCamera(
                             60,
                             window.innerWidth / window.innerHeight,
-                            0.1,
-                            1000
+                            1,
+                            2000
                         );
-                        this.camera.position.set(0, 50, 80);
-                        this.camera.lookAt(0, 0, 0);
+                        this.updateCameraPosition();
                         
-                        // Создаем рендерер
                         const canvas = document.getElementById('game-canvas');
                         this.renderer = new THREE.WebGLRenderer({
                             canvas: canvas,
@@ -956,7 +1102,6 @@
                         this.renderer.shadowMap.enabled = true;
                         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
                         
-                        // Освещение
                         const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
                         this.scene.add(ambientLight);
                         
@@ -965,7 +1110,6 @@
                         directionalLight.castShadow = true;
                         this.scene.add(directionalLight);
                         
-                        // Обработка ресайза
                         window.addEventListener('resize', () => this.onWindowResize());
                         
                         resolve();
@@ -974,6 +1118,18 @@
                         throw error;
                     }
                 });
+            }
+
+            updateCameraPosition() {
+                const phi = this.cameraRotation.x;
+                const theta = this.cameraRotation.y;
+                
+                const x = this.cameraTarget.x + this.cameraDistance * Math.sin(phi) * Math.sin(theta);
+                const y = this.cameraTarget.y + this.cameraDistance * Math.cos(phi);
+                const z = this.cameraTarget.z + this.cameraDistance * Math.sin(phi) * Math.cos(theta);
+                
+                this.camera.position.set(x, y, z);
+                this.camera.lookAt(this.cameraTarget);
             }
 
             async initGameSystems() {
@@ -990,43 +1146,102 @@
                         enemiesKilled: 0,
                         resourcesEarned: 0,
                         controlledMines: 0,
-                        totalMines: 3,
+                        totalMines: 5,
                         mineIncome: 50,
+                        unitLimit: 20,
+                        currentUnits: 0,
+                        barracksCount: 0,
+                        wallsCount: 0,
                         gameTime: 0,
                         gameActive: false,
                         units: [],
                         enemies: [],
+                        buildings: [],
+                        walls: [],
                         mines: [],
-                        selectedUnit: null
+                        selectedUnits: []
                     };
                     
                     this.unitsData = {
                         skitarii: { 
                             cost: 250, 
-                            hp: 150, 
-                            damage: 30, 
+                            hp: 100,
+                            maxHP: 100,
+                            damage: 20, 
                             range: 40, 
-                            attackSpeed: 1.0,
+                            attackSpeed: 1.5,
+                            speed: 2.5,
+                            sight: 60,
                             color: 0x9d00ff,
-                            movable: true 
+                            movable: true,
+                            buildTime: 5000
                         },
                         turret: { 
                             cost: 500, 
-                            hp: 300, 
+                            hp: 300,
+                            maxHP: 300,
                             damage: 50, 
-                            range: 60, 
+                            range: 80, 
                             attackSpeed: 0.8,
+                            speed: 0,
+                            sight: 100,
                             color: 0xffd700,
-                            movable: false 
+                            movable: false,
+                            buildTime: 10000
                         },
                         dreadnought: { 
                             cost: 1000, 
-                            hp: 800, 
+                            hp: 800,
+                            maxHP: 800,
                             damage: 80, 
                             range: 25, 
-                            attackSpeed: 1.5,
+                            attackSpeed: 1.0,
+                            speed: 1.2,
+                            sight: 50,
                             color: 0xff4500,
-                            movable: true 
+                            movable: true,
+                            buildTime: 15000
+                        }
+                    };
+                    
+                    this.buildingsData = {
+                        barracks: {
+                            cost: 1000,
+                            hp: 500,
+                            maxHP: 500,
+                            unitLimitIncrease: 10,
+                            color: 0x4a006d,
+                            size: { width: 10, depth: 8 },
+                            buildTime: 20000
+                        },
+                        wall: {
+                            cost: 200,
+                            hp: 300,
+                            maxHP: 300,
+                            color: 0x666666,
+                            size: { width: 5, depth: 2 },
+                            buildTime: 5000
+                        }
+                    };
+                    
+                    this.enemyData = {
+                        basic: {
+                            hp: 100,
+                            maxHP: 100,
+                            damage: 15,
+                            speed: 1.2,
+                            sight: 50,
+                            bounty: 50,
+                            color: 0x00ff00
+                        },
+                        heavy: {
+                            hp: 300,
+                            maxHP: 300,
+                            damage: 35,
+                            speed: 0.8,
+                            sight: 40,
+                            bounty: 150,
+                            color: 0xff8800
                         }
                     };
                     
@@ -1036,8 +1251,7 @@
 
             async createGameWorld() {
                 return new Promise((resolve) => {
-                    // Земля
-                    const groundGeometry = new THREE.CircleGeometry(300, 64);
+                    const groundGeometry = new THREE.CircleGeometry(500, 128);
                     const groundMaterial = new THREE.MeshStandardMaterial({
                         color: 0x1a1a2e,
                         roughness: 0.8,
@@ -1048,13 +1262,8 @@
                     ground.receiveShadow = true;
                     this.scene.add(ground);
                     
-                    // База
                     this.createBase();
-                    
-                    // Шахты
                     this.createMines();
-                    
-                    // Декорации
                     this.createDecorations();
                     
                     resolve();
@@ -1064,20 +1273,18 @@
             createBase() {
                 const baseGroup = new THREE.Group();
                 
-                // Основная башня
-                const towerGeometry = new THREE.CylinderGeometry(15, 20, 30, 16);
+                const towerGeometry = new THREE.CylinderGeometry(20, 25, 40, 16);
                 const towerMaterial = new THREE.MeshStandardMaterial({
                     color: 0x333333,
                     metalness: 0.8,
                     roughness: 0.2
                 });
                 const tower = new THREE.Mesh(towerGeometry, towerMaterial);
-                tower.position.y = 15;
+                tower.position.y = 20;
                 tower.castShadow = true;
                 baseGroup.add(tower);
                 
-                // Энергетическое ядро
-                const coreGeometry = new THREE.SphereGeometry(6, 16, 16);
+                const coreGeometry = new THREE.SphereGeometry(8, 16, 16);
                 const coreMaterial = new THREE.MeshStandardMaterial({
                     color: 0x00ffff,
                     emissive: 0x00ffff,
@@ -1086,18 +1293,17 @@
                     opacity: 0.8
                 });
                 this.core = new THREE.Mesh(coreGeometry, coreMaterial);
-                this.core.position.y = 15;
+                this.core.position.y = 20;
                 baseGroup.add(this.core);
                 
-                // Платформа
-                const platformGeometry = new THREE.CylinderGeometry(25, 30, 4, 16);
+                const platformGeometry = new THREE.CylinderGeometry(30, 35, 5, 16);
                 const platformMaterial = new THREE.MeshStandardMaterial({
                     color: 0x444444,
                     metalness: 0.6,
                     roughness: 0.4
                 });
                 const platform = new THREE.Mesh(platformGeometry, platformMaterial);
-                platform.position.y = 2;
+                platform.position.y = 2.5;
                 baseGroup.add(platform);
                 
                 this.scene.add(baseGroup);
@@ -1106,35 +1312,35 @@
 
             createMines() {
                 const minePositions = [
-                    { x: 100, z: 0, name: "Альфа" },
-                    { x: -50, z: 86, name: "Бета" },
-                    { x: -86, z: -50, name: "Гамма" }
+                    { x: 200, z: 0, name: "Альфа" },
+                    { x: -200, z: 0, name: "Бета" },
+                    { x: 0, z: 200, name: "Гамма" },
+                    { x: 0, z: -200, name: "Дельта" },
+                    { x: 150, z: 150, name: "Эпсилон" }
                 ];
 
                 minePositions.forEach((pos, index) => {
                     const mineGroup = new THREE.Group();
                     
-                    // Платформа
-                    const platformGeometry = new THREE.CylinderGeometry(10, 12, 3, 8);
+                    const platformGeometry = new THREE.CylinderGeometry(12, 15, 4, 8);
                     const platformMaterial = new THREE.MeshStandardMaterial({
                         color: 0x333333,
                         metalness: 0.7,
                         roughness: 0.3
                     });
                     const platform = new THREE.Mesh(platformGeometry, platformMaterial);
-                    platform.position.y = 1.5;
+                    platform.position.y = 2;
                     platform.castShadow = true;
                     mineGroup.add(platform);
                     
-                    // Буровая установка
-                    const drillGeometry = new THREE.CylinderGeometry(3, 2, 15, 8);
+                    const drillGeometry = new THREE.CylinderGeometry(4, 3, 20, 8);
                     const drillMaterial = new THREE.MeshStandardMaterial({
                         color: 0xff4500,
                         metalness: 0.8,
                         roughness: 0.2
                     });
                     const drill = new THREE.Mesh(drillGeometry, drillMaterial);
-                    drill.position.y = 8;
+                    drill.position.y = 12;
                     mineGroup.add(drill);
                     
                     mineGroup.position.set(pos.x, 0, pos.z);
@@ -1156,9 +1362,8 @@
             }
 
             createDecorations() {
-                // Камни
-                for (let i = 0; i < 20; i++) {
-                    const size = 2 + Math.random() * 8;
+                for (let i = 0; i < 50; i++) {
+                    const size = 3 + Math.random() * 12;
                     const rockGeometry = new THREE.DodecahedronGeometry(size, 0);
                     const rockMaterial = new THREE.MeshStandardMaterial({
                         color: 0x333333,
@@ -1167,7 +1372,7 @@
                     const rock = new THREE.Mesh(rockGeometry, rockMaterial);
                     
                     const angle = Math.random() * Math.PI * 2;
-                    const distance = 80 + Math.random() * 200;
+                    const distance = 100 + Math.random() * 350;
                     rock.position.x = Math.cos(angle) * distance;
                     rock.position.z = Math.sin(angle) * distance;
                     rock.position.y = size / 2;
@@ -1179,28 +1384,42 @@
 
             async initUI() {
                 return new Promise((resolve) => {
-                    // Перетаскивание юнитов
-                    const unitCards = document.querySelectorAll('.unit-card');
-                    unitCards.forEach(card => {
-                        card.addEventListener('dragstart', (e) => this.handleDragStart(e));
-                        card.addEventListener('dragend', (e) => this.handleDragEnd(e));
-                    });
-                    
-                    // Обработчик для кнопки рестарта
                     document.getElementById('restart-btn').addEventListener('click', () => Game.restart());
                     
-                    // Настройка управления
                     this.setupControls();
+                    this.setupBuildMenu();
                     
                     resolve();
                 });
             }
 
             setupControls() {
-                // Клавиатура
                 window.addEventListener('keydown', (e) => {
                     if (!this.gameState?.gameActive) return;
-                    this.keys[e.key.toLowerCase()] = true;
+                    
+                    const key = e.key.toLowerCase();
+                    this.keys[key] = true;
+                    
+                    // Меню строительства по клавише M
+                    if (key === 'm') {
+                        e.preventDefault();
+                        const buildMenu = document.getElementById('build-menu');
+                        buildMenu.classList.toggle('active');
+                        this.placingBuilding = null;
+                    }
+                    
+                    // Вращение выбранных объектов по клавише R
+                    if (key === 'r' && this.selectedUnits.length > 0) {
+                        e.preventDefault();
+                        this.rotateSelectedUnits();
+                    }
+                    
+                    // Отмена размещения по Escape
+                    if (key === 'escape') {
+                        this.placingBuilding = null;
+                        const indicator = document.getElementById('drop-indicator');
+                        indicator.style.display = 'none';
+                    }
                 });
                 
                 window.addEventListener('keyup', (e) => {
@@ -1208,43 +1427,67 @@
                     this.keys[e.key.toLowerCase()] = false;
                 });
                 
-                // Мышь
                 const canvas = document.getElementById('game-canvas');
                 
                 canvas.addEventListener('mousedown', (e) => {
                     if (!this.gameState?.gameActive) return;
                     
+                    if (e.button === 0) { // Левая кнопка мыши
+                        if (this.placingBuilding) {
+                            this.placeBuilding(e);
+                        } else {
+                            this.dragging = true;
+                            this.dragStart.x = e.clientX;
+                            this.dragStart.y = e.clientY;
+                            this.selectionBox.style.display = 'none';
+                        }
+                    }
+                    
                     if (e.button === 1) { // Средняя кнопка
+                        e.preventDefault();
                         this.isRotating = true;
                         this.lastMousePosition.x = e.clientX;
                         this.lastMousePosition.y = e.clientY;
                         canvas.style.cursor = 'grabbing';
                     }
-                    this.mouseButtons[e.button] = true;
                     
-                    // Выбор юнита
-                    if (e.button === 0 && !this.draggedUnit) {
-                        this.handleCanvasClick(e);
+                    if (e.button === 2) { // Правая кнопка
+                        e.preventDefault();
+                        this.moveSelectedUnits(e);
                     }
+                    
+                    this.mouseButtons[e.button] = true;
                 });
                 
                 canvas.addEventListener('mousemove', (e) => {
                     if (!this.gameState?.gameActive) return;
                     
+                    if (this.dragging) {
+                        const currentX = e.clientX;
+                        const currentY = e.clientY;
+                        
+                        this.selectionBox.style.left = Math.min(this.dragStart.x, currentX) + 'px';
+                        this.selectionBox.style.top = Math.min(this.dragStart.y, currentY) + 'px';
+                        this.selectionBox.style.width = Math.abs(currentX - this.dragStart.x) + 'px';
+                        this.selectionBox.style.height = Math.abs(currentY - this.dragStart.y) + 'px';
+                        this.selectionBox.style.display = 'block';
+                    }
+                    
                     if (this.isRotating) {
                         const deltaX = e.clientX - this.lastMousePosition.x;
                         const deltaY = e.clientY - this.lastMousePosition.y;
                         
-                        this.cameraRotation.y += deltaX * 0.005;
-                        this.cameraRotation.x += deltaY * 0.005;
-                        this.cameraRotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, this.cameraRotation.x));
+                        this.cameraRotation.y -= deltaX * 0.005;
+                        this.cameraRotation.x -= deltaY * 0.005;
                         
+                        this.cameraRotation.x = Math.max(-Math.PI / 2, Math.min(-0.1, this.cameraRotation.x));
+                        
+                        this.updateCameraPosition();
                         this.lastMousePosition.x = e.clientX;
                         this.lastMousePosition.y = e.clientY;
                     }
                     
-                    // Индикатор перетаскивания
-                    if (this.draggedUnit) {
+                    if (this.placingBuilding) {
                         const indicator = document.getElementById('drop-indicator');
                         indicator.style.left = (e.clientX - 20) + 'px';
                         indicator.style.top = (e.clientY - 20) + 'px';
@@ -1254,137 +1497,118 @@
                 canvas.addEventListener('mouseup', (e) => {
                     if (!this.gameState?.gameActive) return;
                     
+                    if (e.button === 0 && this.dragging) {
+                        this.dragging = false;
+                        this.selectUnitsInBox(e);
+                        this.selectionBox.style.display = 'none';
+                    }
+                    
                     if (e.button === 1) {
                         this.isRotating = false;
-                        canvas.style.cursor = 'grab';
+                        canvas.style.cursor = 'default';
                     }
-                    this.mouseButtons[e.button] = false;
                     
-                    // Размещение юнита
-                    if (e.button === 0 && this.draggedUnit) {
-                        this.placeUnit(e);
-                    }
+                    this.mouseButtons[e.button] = false;
                 });
                 
                 canvas.addEventListener('wheel', (e) => {
                     if (!this.gameState?.gameActive) return;
                     e.preventDefault();
                     
-                    const zoomSpeed = 3;
+                    const zoomSpeed = 15;
                     const delta = e.deltaY > 0 ? zoomSpeed : -zoomSpeed;
-                    const newDistance = this.camera.position.distanceTo(new THREE.Vector3(0, 0, 0)) + delta;
                     
-                    if (newDistance >= 30 && newDistance <= 200) {
-                        const direction = this.camera.position.clone().normalize();
-                        this.camera.position.copy(direction.multiplyScalar(newDistance));
-                    }
+                    this.cameraDistance = Math.max(50, Math.min(500, this.cameraDistance + delta));
+                    this.updateCameraPosition();
                 });
                 
                 canvas.addEventListener('contextmenu', (e) => {
-                    if (!this.gameState?.gameActive) return;
                     e.preventDefault();
-                    
-                    // Перемещение юнита
-                    if (this.selectedUnit && this.selectedUnit.userData?.movable) {
-                        this.moveSelectedUnit(e);
-                    }
                 });
             }
 
-            handleDragStart(e) {
-                if (!this.gameState?.gameActive) return;
+            setupBuildMenu() {
+                const closeBtn = document.getElementById('close-build-btn');
+                closeBtn.addEventListener('click', () => {
+                    const buildMenu = document.getElementById('build-menu');
+                    buildMenu.classList.remove('active');
+                    this.placingBuilding = null;
+                });
                 
-                this.draggedUnit = e.target.dataset.unit;
-                const unitCost = this.unitsData[this.draggedUnit]?.cost || 0;
+                const categories = document.querySelectorAll('.category-btn');
+                categories.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        categories.forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        this.currentBuildCategory = btn.dataset.category;
+                        this.updateBuildItems();
+                    });
+                });
                 
-                if (this.gameState.credits < unitCost) {
-                    alert('Недостаточно кредитов!');
-                    e.preventDefault();
-                    this.draggedUnit = null;
-                    return;
+                this.updateBuildItems();
+            }
+
+            updateBuildItems() {
+                const buildItems = document.getElementById('build-items');
+                buildItems.innerHTML = '';
+                
+                let items = [];
+                
+                switch(this.currentBuildCategory) {
+                    case 'units':
+                        items = [
+                            { type: 'skitarii', name: 'Скитарий', cost: 250, icon: '⚔', requirements: '' },
+                            { type: 'turret', name: 'Турель', cost: 500, icon: '☢', requirements: '' },
+                            { type: 'dreadnought', name: 'Дредноут', cost: 1000, icon: '⚙', requirements: '' }
+                        ];
+                        break;
+                    case 'buildings':
+                        items = [
+                            { type: 'barracks', name: 'Казармы', cost: 1000, icon: '🏛', requirements: 'Увеличивает лимит войск на 10' }
+                        ];
+                        break;
+                    case 'defenses':
+                        items = [
+                            { type: 'wall', name: 'Стена', cost: 200, icon: '🧱', requirements: 'Блокирует проход врагам' }
+                        ];
+                        break;
                 }
                 
-                e.target.classList.add('dragging');
-                e.dataTransfer.setData('text/plain', this.draggedUnit);
-                
+                items.forEach(item => {
+                    const canAfford = this.gameState.credits >= item.cost;
+                    const canBuild = item.type === 'skitarii' || item.type === 'dreadnought' ? 
+                        this.gameState.currentUnits < this.gameState.unitLimit : true;
+                    
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = `build-item ${!canAfford || !canBuild ? 'disabled' : ''}`;
+                    itemDiv.innerHTML = `
+                        <div class="build-icon">${item.icon}</div>
+                        <div class="build-name">${item.name}</div>
+                        <div class="build-cost">${item.cost} Ⱡ</div>
+                        ${item.requirements ? `<div class="build-requirements">${item.requirements}</div>` : ''}
+                    `;
+                    
+                    if (canAfford && canBuild) {
+                        itemDiv.addEventListener('click', () => {
+                            this.startPlacingBuilding(item.type);
+                            document.getElementById('build-menu').classList.remove('active');
+                        });
+                    }
+                    
+                    buildItems.appendChild(itemDiv);
+                });
+            }
+
+            startPlacingBuilding(type) {
+                this.placingBuilding = type;
                 const indicator = document.getElementById('drop-indicator');
                 indicator.style.display = 'block';
-                indicator.style.left = (e.clientX - 20) + 'px';
-                indicator.style.top = (e.clientY - 20) + 'px';
+                indicator.style.backgroundColor = 'rgba(0, 255, 0, 0.2)';
             }
 
-            handleDragEnd(e) {
-                e.target.classList.remove('dragging');
-                const indicator = document.getElementById('drop-indicator');
-                indicator.style.display = 'none';
-                this.draggedUnit = null;
-            }
-
-            handleCanvasClick(e) {
-                const rect = e.target.getBoundingClientRect();
-                this.mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-                this.mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+            placeBuilding(e) {
+                if (!this.placingBuilding) return;
                 
-                this.raycaster.setFromCamera(this.mouse, this.camera);
-                
-                // Проверяем клик по юнитам
-                const unitIntersects = this.raycaster.intersectObjects(this.gameState.units);
-                if (unitIntersects.length > 0) {
-                    this.selectUnit(unitIntersects[0].object);
-                    return;
-                }
-                
-                // Проверяем клик по шахтам
-                const mineIntersects = this.raycaster.intersectObjects(
-                    this.gameState.mines.map(m => m.group.children[0])
-                );
-                
-                if (mineIntersects.length > 0) {
-                    const mineObject = mineIntersects[0].object.parent;
-                    const mine = this.gameState.mines.find(m => m.group === mineObject);
-                    if (mine && !mine.controlled) {
-                        this.captureMine(mine);
-                    }
-                }
-                
-                // Снимаем выделение
-                if (this.selectedUnit) {
-                    if (this.selectedUnit.material && this.selectedUnit.material.emissive) {
-                        this.selectedUnit.material.emissive.setHex(0x000000);
-                    }
-                    this.selectedUnit = null;
-                }
-            }
-
-            selectUnit(unit) {
-                // Снимаем выделение с предыдущего
-                if (this.selectedUnit) {
-                    if (this.selectedUnit.material && this.selectedUnit.material.emissive) {
-                        this.selectedUnit.material.emissive.setHex(0x000000);
-                    }
-                }
-                
-                // Выделяем новый
-                this.selectedUnit = unit;
-                if (unit.material && unit.material.emissive) {
-                    unit.material.emissive.setHex(0x00ff00);
-                    unit.material.emissiveIntensity = 0.3;
-                }
-            }
-
-            placeUnit(e) {
-                if (!this.draggedUnit || !this.gameState?.gameActive) return;
-                
-                const unitType = this.draggedUnit;
-                const unitData = this.unitsData[unitType];
-                if (!unitData) return;
-                
-                if (this.gameState.credits < unitData.cost) {
-                    alert('Недостаточно кредитов!');
-                    return;
-                }
-                
-                // Получаем позицию на земле
                 const rect = e.target.getBoundingClientRect();
                 this.mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
                 this.mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
@@ -1395,23 +1619,39 @@
                 const intersectionPoint = new THREE.Vector3();
                 
                 if (this.raycaster.ray.intersectPlane(plane, intersectionPoint)) {
-                    // Проверяем расстояние до базы
                     const distanceToBase = intersectionPoint.distanceTo(new THREE.Vector3(0, 0, 0));
                     
-                    if (distanceToBase > 25) {
-                        this.createUnit(unitType, intersectionPoint.x, intersectionPoint.z);
-                        this.gameState.credits -= unitData.cost;
-                        this.updateUI();
+                    if (distanceToBase > 30 && distanceToBase < 450) {
+                        if (this.placingBuilding === 'wall') {
+                            this.createWall(intersectionPoint.x, intersectionPoint.z);
+                        } else if (this.placingBuilding === 'barracks') {
+                            this.createBarracks(intersectionPoint.x, intersectionPoint.z);
+                        } else {
+                            this.createUnit(this.placingBuilding, intersectionPoint.x, intersectionPoint.z);
+                        }
+                    } else {
+                        alert('Нельзя строить слишком близко к базе или слишком далеко!');
                     }
                 }
                 
-                this.draggedUnit = null;
-                document.getElementById('drop-indicator').style.display = 'none';
+                this.placingBuilding = null;
+                const indicator = document.getElementById('drop-indicator');
+                indicator.style.display = 'none';
             }
 
             createUnit(type, x, z) {
                 const unitData = this.unitsData[type];
                 if (!unitData) return null;
+                
+                if (this.gameState.credits < unitData.cost) {
+                    alert('Недостаточно кредитов!');
+                    return null;
+                }
+                
+                if (this.gameState.currentUnits >= this.gameState.unitLimit) {
+                    alert('Достигнут лимит войск! Постройте казармы для увеличения лимита.');
+                    return null;
+                }
                 
                 let geometry;
                 switch(type) {
@@ -1446,52 +1686,185 @@
                     damage: unitData.damage,
                     range: unitData.range,
                     attackSpeed: unitData.attackSpeed,
+                    speed: unitData.speed,
+                    sight: unitData.sight,
                     lastAttack: 0,
                     movable: unitData.movable,
-                    target: null
+                    target: null,
+                    destination: null,
+                    rotation: 0,
+                    isMoving: false
                 };
                 
                 this.scene.add(unit);
                 this.gameState.units.push(unit);
+                this.gameState.currentUnits++;
+                this.gameState.credits -= unitData.cost;
+                
+                this.updateUI();
+                this.createHPBar(unit);
                 
                 return unit;
             }
 
-            captureMine(mine) {
-                if (!this.gameState?.gameActive) return;
+            createWall(x, z) {
+                const wallData = this.buildingsData.wall;
                 
-                // Проверяем наличие юнитов рядом
-                const hasUnitsNearby = this.gameState.units.some(unit => {
-                    const unitPos = unit.position;
-                    const minePos = new THREE.Vector3(mine.x, 0, mine.z);
-                    return unitPos.distanceTo(minePos) < 20;
-                });
-                
-                if (!hasUnitsNearby) {
-                    alert('Нет юнитов рядом с шахтой!');
+                if (this.gameState.credits < wallData.cost) {
+                    alert('Недостаточно кредитов!');
                     return;
                 }
                 
-                mine.controlled = true;
-                this.gameState.controlledMines++;
+                const geometry = new THREE.BoxGeometry(wallData.size.width, 4, wallData.size.depth);
+                const material = new THREE.MeshStandardMaterial({
+                    color: wallData.color,
+                    metalness: 0.6,
+                    roughness: 0.4
+                });
                 
-                // Визуальные изменения
-                if (mine.drill) {
-                    mine.drill.material.color.setHex(0x00ff00);
-                }
+                const wall = new THREE.Mesh(geometry, material);
+                wall.position.set(x, 2, z);
+                wall.castShadow = true;
+                wall.receiveShadow = true;
                 
-                // Обновление UI
-                const mineElement = document.getElementById(`mine-${mine.id + 1}`);
-                if (mineElement) {
-                    mineElement.textContent = 'Контролируется';
-                    mineElement.style.color = '#00ff00';
-                }
+                wall.userData = {
+                    type: 'wall',
+                    hp: wallData.hp,
+                    maxHP: wallData.hp,
+                    rotation: 0
+                };
+                
+                this.scene.add(wall);
+                this.gameState.walls.push(wall);
+                this.gameState.wallsCount++;
+                this.gameState.credits -= wallData.cost;
                 
                 this.updateUI();
+                this.createHPBar(wall);
+                
+                return wall;
             }
 
-            moveSelectedUnit(e) {
-                if (!this.selectedUnit || !this.selectedUnit.userData?.movable) return;
+            createBarracks(x, z) {
+                const barracksData = this.buildingsData.barracks;
+                
+                if (this.gameState.credits < barracksData.cost) {
+                    alert('Недостаточно кредитов!');
+                    return;
+                }
+                
+                const geometry = new THREE.BoxGeometry(barracksData.size.width, 6, barracksData.size.depth);
+                const material = new THREE.MeshStandardMaterial({
+                    color: barracksData.color,
+                    metalness: 0.6,
+                    roughness: 0.4
+                });
+                
+                const barracks = new THREE.Mesh(geometry, material);
+                barracks.position.set(x, 3, z);
+                barracks.castShadow = true;
+                barracks.receiveShadow = true;
+                
+                barracks.userData = {
+                    type: 'barracks',
+                    hp: barracksData.hp,
+                    maxHP: barracksData.hp
+                };
+                
+                this.scene.add(barracks);
+                this.gameState.buildings.push(barracks);
+                this.gameState.barracksCount++;
+                this.gameState.unitLimit += barracksData.unitLimitIncrease;
+                this.gameState.credits -= barracksData.cost;
+                
+                this.updateUI();
+                this.createHPBar(barracks);
+                
+                return barracks;
+            }
+
+            createHPBar(object) {
+                const hpBar = document.createElement('div');
+                hpBar.className = 'hp-bar';
+                
+                const hpFill = document.createElement('div');
+                hpFill.className = 'hp-fill';
+                hpBar.appendChild(hpFill);
+                
+                document.getElementById('game-ui').appendChild(hpBar);
+                this.hpBars.set(object, { element: hpBar, fill: hpFill });
+            }
+
+            updateHPBar(object) {
+                const hpBar = this.hpBars.get(object);
+                if (!hpBar || !object.userData) return;
+                
+                const percent = (object.userData.hp / object.userData.maxHP) * 100;
+                hpBar.fill.style.width = percent + '%';
+                
+                const position = object.position.clone();
+                position.y += 5;
+                
+                const vector = position.project(this.camera);
+                const x = (vector.x * 0.5 + 0.5) * window.innerWidth;
+                const y = (-vector.y * 0.5 + 0.5) * window.innerHeight;
+                
+                hpBar.element.style.left = (x - 20) + 'px';
+                hpBar.element.style.top = (y - 30) + 'px';
+                hpBar.element.style.display = 'block';
+            }
+
+            selectUnitsInBox(e) {
+                const rect = e.target.getBoundingClientRect();
+                const x1 = Math.min(this.dragStart.x, e.clientX);
+                const x2 = Math.max(this.dragStart.x, e.clientX);
+                const y1 = Math.min(this.dragStart.y, e.clientY);
+                const y2 = Math.max(this.dragStart.y, e.clientY);
+                
+                this.clearSelection();
+                
+                this.gameState.units.forEach(unit => {
+                    const position = unit.position.clone().project(this.camera);
+                    const screenX = (position.x * 0.5 + 0.5) * window.innerWidth;
+                    const screenY = (-position.y * 0.5 + 0.5) * window.innerHeight;
+                    
+                    if (screenX >= x1 && screenX <= x2 && screenY >= y1 && screenY <= y2) {
+                        this.selectUnit(unit);
+                    }
+                });
+            }
+
+            clearSelection() {
+                this.selectedUnits.forEach(unit => {
+                    if (unit.material && unit.material.emissive) {
+                        unit.material.emissive.setHex(0x000000);
+                    }
+                });
+                this.selectedUnits = [];
+            }
+
+            selectUnit(unit) {
+                if (unit.userData.type === 'wall' || unit.userData.type === 'barracks') {
+                    this.clearSelection();
+                }
+                
+                this.selectedUnits.push(unit);
+                if (unit.material && unit.material.emissive) {
+                    unit.material.emissive.setHex(0x00ff00);
+                    unit.material.emissiveIntensity = 0.3;
+                }
+            }
+
+            rotateSelectedUnits() {
+                this.selectedUnits.forEach(unit => {
+                    if (unit.userData.type === 'wall') {
+                        unit.rotation.y += Math.PI / 2;
+                    }
+                });
+            }
+
+            moveSelectedUnits(e) {
+                if (this.selectedUnits.length === 0) return;
                 
                 const rect = e.target.getBoundingClientRect();
                 this.mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
@@ -1505,11 +1878,50 @@
                 if (this.raycaster.ray.intersectPlane(plane, intersectionPoint)) {
                     const distanceToBase = intersectionPoint.distanceTo(new THREE.Vector3(0, 0, 0));
                     
-                    if (distanceToBase > 25) {
-                        this.selectedUnit.position.x = intersectionPoint.x;
-                        this.selectedUnit.position.z = intersectionPoint.z;
+                    if (distanceToBase > 30 && distanceToBase < 450) {
+                        this.selectedUnits.forEach(unit => {
+                            if (unit.userData.movable) {
+                                unit.userData.destination = intersectionPoint.clone();
+                                unit.userData.isMoving = true;
+                                
+                                const offsetX = (Math.random() - 0.5) * 10;
+                                const offsetZ = (Math.random() - 0.5) * 10;
+                                unit.userData.destination.x += offsetX;
+                                unit.userData.destination.z += offsetZ;
+                            }
+                        });
+                        
+                        this.createMoveEffect(intersectionPoint);
                     }
                 }
+            }
+
+            createMoveEffect(position) {
+                const ringGeometry = new THREE.RingGeometry(5, 7, 16);
+                const ringMaterial = new THREE.MeshBasicMaterial({
+                    color: 0x00ff00,
+                    side: THREE.DoubleSide,
+                    transparent: true,
+                    opacity: 0.7
+                });
+                const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+                ring.position.set(position.x, 0.5, position.z);
+                ring.rotation.x = -Math.PI / 2;
+                this.scene.add(ring);
+                
+                let scale = 1;
+                const animate = () => {
+                    scale += 0.05;
+                    ring.scale.set(scale, scale, scale);
+                    ring.material.opacity -= 0.05;
+                    
+                    if (ring.material.opacity > 0) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        this.scene.remove(ring);
+                    }
+                };
+                animate();
             }
 
             async startGameplay() {
@@ -1533,187 +1945,75 @@
                     
                     this.gameState.gameTime++;
                     
-                    // Обновление камеры
-                    this.updateCamera();
-                    
-                    // Обновление анимаций
+                    this.updateCameraMovement();
                     this.updateAnimations();
-                    
-                    // Обновление врагов
-                    this.updateEnemies();
-                    
-                    // Обновление юнитов
                     this.updateUnits();
+                    this.updateEnemies();
+                    this.updateBuildings();
+                    this.updateHPBars();
                     
-                    // Проверка поражения
                     if (this.gameState.baseHP <= 0) {
                         this.endGame();
                         return;
                     }
                     
-                    // Рендер
                     this.renderer.render(this.scene, this.camera);
-                    
                     this.gameLoopId = requestAnimationFrame(animate);
                 };
                 
                 animate();
             }
 
-            updateCamera() {
-                // Управление WASD
-                const cameraSpeed = 0.5;
-                const moveVector = new THREE.Vector3();
+            updateCameraMovement() {
+                const moveSpeed = 5;
+                const forward = new THREE.Vector3(
+                    Math.sin(this.cameraRotation.y),
+                    0,
+                    Math.cos(this.cameraRotation.y)
+                ).normalize();
                 
-                if (this.keys['w'] || this.keys['arrowup']) moveVector.z -= 1;
-                if (this.keys['s'] || this.keys['arrowdown']) moveVector.z += 1;
-                if (this.keys['a'] || this.keys['arrowleft']) moveVector.x -= 1;
-                if (this.keys['d'] || this.keys['arrowright']) moveVector.x += 1;
+                const right = new THREE.Vector3(
+                    Math.cos(this.cameraRotation.y),
+                    0,
+                    -Math.sin(this.cameraRotation.y)
+                ).normalize();
                 
-                if (moveVector.length() > 0) {
-                    moveVector.normalize().multiplyScalar(cameraSpeed);
-                    
-                    // Учитываем вращение камеры
-                    const angle = this.cameraRotation.y;
-                    const cos = Math.cos(angle);
-                    const sin = Math.sin(angle);
-                    
-                    const deltaX = moveVector.x * cos - moveVector.z * sin;
-                    const deltaZ = moveVector.x * sin + moveVector.z * cos;
-                    
-                    this.camera.position.x += deltaX;
-                    this.camera.position.z += deltaZ;
+                if (this.keys['w'] || this.keys['arrowup']) {
+                    this.cameraTarget.add(forward.clone().multiplyScalar(moveSpeed));
+                    this.updateCameraPosition();
+                }
+                if (this.keys['s'] || this.keys['arrowdown']) {
+                    this.cameraTarget.add(forward.clone().multiplyScalar(-moveSpeed));
+                    this.updateCameraPosition();
+                }
+                if (this.keys['a'] || this.keys['arrowleft']) {
+                    this.cameraTarget.add(right.clone().multiplyScalar(-moveSpeed));
+                    this.updateCameraPosition();
+                }
+                if (this.keys['d'] || this.keys['arrowright']) {
+                    this.cameraTarget.add(right.clone().multiplyScalar(moveSpeed));
+                    this.updateCameraPosition();
                 }
                 
-                // Обновление позиции камеры на основе вращения
-                const distance = 80;
-                const cameraX = Math.sin(this.cameraRotation.y) * distance;
-                const cameraZ = Math.cos(this.cameraRotation.y) * distance;
-                const cameraY = 50 + Math.sin(this.cameraRotation.x) * distance;
-                
-                this.camera.position.x = cameraX;
-                this.camera.position.y = cameraY;
-                this.camera.position.z = cameraZ;
-                
-                this.camera.lookAt(0, 0, 0);
+                this.cameraTarget.x = Math.max(-400, Math.min(400, this.cameraTarget.x));
+                this.cameraTarget.z = Math.max(-400, Math.min(400, this.cameraTarget.z));
             }
 
             updateAnimations() {
-                // Анимация ядра базы
                 if (this.core) {
                     const pulse = Math.sin(this.gameState.gameTime * 0.05) * 0.1 + 0.9;
                     this.core.scale.setScalar(pulse);
                 }
                 
-                // Анимация шахт
                 this.gameState.mines.forEach(mine => {
                     if (mine.drill) {
                         mine.drill.rotation.y += 0.02;
+                        if (mine.controlled) {
+                            const bounce = Math.sin(this.gameState.gameTime * 0.1 + mine.id) * 2;
+                            mine.drill.position.y = 12 + bounce;
+                        }
                     }
                 });
-            }
-
-            startWaves() {
-                // Первая волна через 10 секунд
-                setTimeout(() => this.spawnWave(), 10000);
-                
-                // Интервал волн
-                this.waveInterval = setInterval(() => {
-                    if (!this.gameState?.gameActive) return;
-                    
-                    this.gameState.currentWave++;
-                    this.gameState.waveTimer = 60;
-                    this.spawnWave();
-                    
-                }, 60000); // 60 секунд между волнами
-                
-                // Таймер волны
-                this.waveTimerInterval = setInterval(() => {
-                    if (!this.gameState?.gameActive) return;
-                    
-                    if (this.gameState.waveTimer > 0) {
-                        this.gameState.waveTimer--;
-                        document.getElementById('wave-timer').textContent = this.gameState.waveTimer;
-                    }
-                }, 1000);
-            }
-
-            spawnWave() {
-                const enemyCount = 2 + Math.floor(this.gameState.currentWave * 1.2);
-                
-                for (let i = 0; i < enemyCount; i++) {
-                    setTimeout(() => {
-                        if (!this.gameState?.gameActive) return;
-                        this.spawnEnemy();
-                    }, i * 1000);
-                }
-                
-                document.getElementById('wave').textContent = this.gameState.currentWave;
-            }
-
-            spawnEnemy() {
-                const angle = Math.random() * Math.PI * 2;
-                const distance = 280;
-                const x = Math.cos(angle) * distance;
-                const z = Math.sin(angle) * distance;
-                
-                const geometry = new THREE.BoxGeometry(3, 4, 3);
-                const material = new THREE.MeshStandardMaterial({
-                    color: 0x00ff00,
-                    metalness: 0.5,
-                    roughness: 0.5
-                });
-                
-                const enemy = new THREE.Mesh(geometry, material);
-                enemy.position.set(x, 2, z);
-                enemy.castShadow = true;
-                
-                enemy.userData = {
-                    hp: 100 + this.gameState.currentWave * 20,
-                    maxHP: 100 + this.gameState.currentWave * 20,
-                    damage: 20 + this.gameState.currentWave * 5,
-                    speed: 0.5 + Math.random() * 0.3,
-                    bounty: 50 + this.gameState.currentWave * 10
-                };
-                
-                this.scene.add(enemy);
-                this.gameState.enemies.push(enemy);
-            }
-
-            updateEnemies() {
-                for (let i = this.gameState.enemies.length - 1; i >= 0; i--) {
-                    const enemy = this.gameState.enemies[i];
-                    
-                    if (enemy.userData.hp <= 0) {
-                        // Уничтожение врага
-                        this.gameState.credits += enemy.userData.bounty;
-                        this.gameState.enemiesKilled++;
-                        this.gameState.resourcesEarned += enemy.userData.bounty;
-                        
-                        this.scene.remove(enemy);
-                        this.gameState.enemies.splice(i, 1);
-                        this.updateUI();
-                        continue;
-                    }
-                    
-                    // Движение к базе
-                    const dx = 0 - enemy.position.x;
-                    const dz = 0 - enemy.position.z;
-                    const distance = Math.sqrt(dx * dx + dz * dz);
-                    
-                    if (distance > 15) {
-                        enemy.position.x += (dx / distance) * enemy.userData.speed;
-                        enemy.position.z += (dz / distance) * enemy.userData.speed;
-                    } else {
-                        // Атака базы
-                        this.gameState.baseHP -= enemy.userData.damage;
-                        enemy.userData.hp = 0;
-                        
-                        // Визуальный эффект
-                        this.createDamageEffect(0, 15, 0);
-                        this.updateUI();
-                    }
-                }
             }
 
             updateUnits() {
@@ -1723,10 +2023,34 @@
                     if (unit.userData.hp <= 0) {
                         this.scene.remove(unit);
                         this.gameState.units.splice(i, 1);
+                        this.gameState.currentUnits--;
+                        
+                        const hpBar = this.hpBars.get(unit);
+                        if (hpBar) {
+                            hpBar.element.remove();
+                            this.hpBars.delete(unit);
+                        }
                         continue;
                     }
                     
-                    // Поиск и атака врагов
+                    if (unit.userData.isMoving && unit.userData.destination) {
+                        const dx = unit.userData.destination.x - unit.position.x;
+                        const dz = unit.userData.destination.z - unit.position.z;
+                        const distance = Math.sqrt(dx * dx + dz * dz);
+                        
+                        if (distance > 1) {
+                            unit.position.x += (dx / distance) * unit.userData.speed;
+                            unit.position.z += (dz / distance) * unit.userData.speed;
+                            
+                            if (Math.abs(dx) > 0.1 || Math.abs(dz) > 0.1) {
+                                unit.rotation.y = Math.atan2(dx, dz);
+                            }
+                        } else {
+                            unit.userData.isMoving = false;
+                            unit.userData.destination = null;
+                        }
+                    }
+                    
                     this.unitAttack(unit);
                 }
             }
@@ -1737,9 +2061,8 @@
                 
                 if (currentTime - unit.userData.lastAttack < attackCooldown) return;
                 
-                // Поиск ближайшего врага
                 let nearestEnemy = null;
-                let nearestDistance = unit.userData.range;
+                let nearestDistance = unit.userData.sight;
                 
                 this.gameState.enemies.forEach(enemy => {
                     const distance = unit.position.distanceTo(enemy.position);
@@ -1749,13 +2072,99 @@
                     }
                 });
                 
-                if (nearestEnemy) {
+                if (nearestEnemy && nearestDistance <= unit.userData.range) {
                     nearestEnemy.userData.hp -= unit.userData.damage;
                     unit.userData.lastAttack = currentTime;
                     
-                    // Визуальный эффект атаки
+                    if (nearestEnemy.userData.hp <= 0) {
+                        this.gameState.credits += nearestEnemy.userData.bounty;
+                        this.gameState.enemiesKilled++;
+                        this.gameState.resourcesEarned += nearestEnemy.userData.bounty;
+                    }
+                    
                     this.createAttackEffect(unit, nearestEnemy);
                 }
+            }
+
+            updateEnemies() {
+                for (let i = this.gameState.enemies.length - 1; i >= 0; i--) {
+                    const enemy = this.gameState.enemies[i];
+                    
+                    if (enemy.userData.hp <= 0) {
+                        this.scene.remove(enemy);
+                        this.gameState.enemies.splice(i, 1);
+                        continue;
+                    }
+                    
+                    let target = null;
+                    let targetDistance = enemy.userData.sight;
+                    
+                    this.gameState.units.forEach(unit => {
+                        const distance = enemy.position.distanceTo(unit.position);
+                        if (distance < targetDistance) {
+                            targetDistance = distance;
+                            target = unit;
+                        }
+                    });
+                    
+                    this.gameState.walls.forEach(wall => {
+                        const distance = enemy.position.distanceTo(wall.position);
+                        if (distance < targetDistance) {
+                            targetDistance = distance;
+                            target = wall;
+                        }
+                    });
+                    
+                    if (target) {
+                        const dx = target.position.x - enemy.position.x;
+                        const dz = target.position.z - enemy.position.z;
+                        const distance = Math.sqrt(dx * dx + dz * dz);
+                        
+                        if (distance > 2) {
+                            enemy.position.x += (dx / distance) * enemy.userData.speed;
+                            enemy.position.z += (dz / distance) * enemy.userData.speed;
+                        } else if (target.userData.type !== 'wall') {
+                            target.userData.hp -= enemy.userData.damage;
+                        }
+                        
+                        enemy.rotation.y = Math.atan2(dx, dz);
+                    } else {
+                        const dx = 0 - enemy.position.x;
+                        const dz = 0 - enemy.position.z;
+                        const distance = Math.sqrt(dx * dx + dz * dz);
+                        
+                        if (distance > 15) {
+                            enemy.position.x += (dx / distance) * enemy.userData.speed;
+                            enemy.position.z += (dz / distance) * enemy.userData.speed;
+                        } else {
+                            this.gameState.baseHP -= enemy.userData.damage;
+                            this.createDamageEffect(0, 20, 0);
+                            this.updateUI();
+                        }
+                    }
+                }
+            }
+
+            updateBuildings() {
+                this.gameState.walls.forEach(wall => {
+                    if (wall.userData.hp <= 0) {
+                        this.scene.remove(wall);
+                        this.gameState.walls = this.gameState.walls.filter(w => w !== wall);
+                        this.gameState.wallsCount--;
+                        
+                        const hpBar = this.hpBars.get(wall);
+                        if (hpBar) {
+                            hpBar.element.remove();
+                            this.hpBars.delete(wall);
+                        }
+                    }
+                });
+            }
+
+            updateHPBars() {
+                [...this.gameState.units, ...this.gameState.walls, ...this.gameState.buildings].forEach(obj => {
+                    this.updateHPBar(obj);
+                });
             }
 
             createAttackEffect(attacker, target) {
@@ -1777,7 +2186,7 @@
             }
 
             createDamageEffect(x, y, z) {
-                const geometry = new THREE.SphereGeometry(3, 8, 8);
+                const geometry = new THREE.SphereGeometry(5, 8, 8);
                 const material = new THREE.MeshBasicMaterial({
                     color: 0xff0000,
                     transparent: true,
@@ -1804,28 +2213,98 @@
                 animate();
             }
 
+            startWaves() {
+                setTimeout(() => this.spawnWave(), 10000);
+                
+                this.waveInterval = setInterval(() => {
+                    if (!this.gameState?.gameActive) return;
+                    
+                    this.gameState.currentWave++;
+                    this.gameState.waveTimer = 60;
+                    this.spawnWave();
+                    
+                }, 60000);
+                
+                this.waveTimerInterval = setInterval(() => {
+                    if (!this.gameState?.gameActive) return;
+                    
+                    if (this.gameState.waveTimer > 0) {
+                        this.gameState.waveTimer--;
+                        document.getElementById('wave-timer').textContent = this.gameState.waveTimer;
+                    }
+                }, 1000);
+            }
+
+            spawnWave() {
+                const enemyCount = 3 + Math.floor(this.gameState.currentWave * 1.5);
+                const heavyCount = Math.floor(this.gameState.currentWave / 3);
+                
+                for (let i = 0; i < enemyCount; i++) {
+                    setTimeout(() => {
+                        if (!this.gameState?.gameActive) return;
+                        
+                        const isHeavy = i < heavyCount;
+                        this.spawnEnemy(isHeavy ? 'heavy' : 'basic');
+                    }, i * 800);
+                }
+                
+                document.getElementById('wave').textContent = this.gameState.currentWave;
+            }
+
+            spawnEnemy(type) {
+                const enemyType = this.enemyData[type] || this.enemyData.basic;
+                
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 480;
+                const x = Math.cos(angle) * distance;
+                const z = Math.sin(angle) * distance;
+                
+                const geometry = new THREE.BoxGeometry(4, 5, 4);
+                const material = new THREE.MeshStandardMaterial({
+                    color: enemyType.color,
+                    metalness: 0.5,
+                    roughness: 0.5
+                });
+                
+                const enemy = new THREE.Mesh(geometry, material);
+                enemy.position.set(x, 2.5, z);
+                enemy.castShadow = true;
+                
+                enemy.userData = {
+                    type: type,
+                    hp: enemyType.hp,
+                    maxHP: enemyType.hp,
+                    damage: enemyType.damage,
+                    speed: enemyType.speed,
+                    sight: enemyType.sight,
+                    bounty: enemyType.bounty
+                };
+                
+                this.scene.add(enemy);
+                this.gameState.enemies.push(enemy);
+                
+                this.createHPBar(enemy);
+            }
+
             startEconomy() {
                 this.economyInterval = setInterval(() => {
                     if (!this.gameState?.gameActive) return;
                     
-                    // Доход от шахт
                     const income = this.gameState.controlledMines * this.gameState.mineIncome;
                     this.gameState.credits += income;
                     this.gameState.resourcesEarned += income;
                     
-                    // Регенерация энергии
                     this.gameState.power = Math.min(
                         this.gameState.powerMax,
-                        this.gameState.power + 5
+                        this.gameState.power + 10
                     );
                     
-                    // Обновление UI
                     document.getElementById('requisition').textContent = 
                         `+${this.gameState.controlledMines * this.gameState.mineIncome}/мин`;
                     
                     this.updateUI();
                     
-                }, 5000); // Каждые 5 секунд
+                }, 10000);
             }
 
             updateUI() {
@@ -1833,6 +2312,20 @@
                 document.getElementById('power').textContent = 
                     `${this.gameState.power}/${this.gameState.powerMax}`;
                 document.getElementById('base-hp').textContent = this.gameState.baseHP;
+                document.getElementById('unit-limit').textContent = 
+                    `${this.gameState.currentUnits}/${this.gameState.unitLimit}`;
+                document.getElementById('barracks-count').textContent = this.gameState.barracksCount;
+                document.getElementById('walls-count').textContent = this.gameState.wallsCount;
+                
+                this.updateBuildItems();
+                
+                this.gameState.mines.forEach(mine => {
+                    const element = document.getElementById(`mine-${mine.id + 1}`);
+                    if (element) {
+                        element.textContent = mine.controlled ? 'Контролируется' : 'Свободна';
+                        element.style.color = mine.controlled ? '#00ff00' : '#fff';
+                    }
+                });
             }
 
             onWindowResize() {
@@ -1862,9 +2355,7 @@
             }
         }
 
-        // Запуск игры при полной загрузке страницы
         window.addEventListener('load', () => {
-            // Проверяем поддержку WebGL
             const canvas = document.createElement('canvas');
             const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
             
@@ -1897,7 +2388,6 @@
                 return;
             }
             
-            // Запускаем игру
             Game.start().catch(error => {
                 console.error('Ошибка запуска игры:', error);
                 const errorDiv = document.createElement('div');
