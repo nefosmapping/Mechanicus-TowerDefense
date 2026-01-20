@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Warhammer 40K: Последний бой | KrimProduction & Огузок™</title>
+    <title>Warhammer 40K: Последний бой | KrimProduction & Огузок™ & Алексей®</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         * {
@@ -220,6 +220,11 @@
             align-items: center;
             backdrop-filter: blur(5px);
             pointer-events: all;
+            transition: opacity 0.3s;
+        }
+
+        .top-bar.hidden {
+            opacity: 0.3;
         }
 
         .resources {
@@ -262,6 +267,118 @@
             border: 2px solid #ff4500;
         }
 
+        /* Кнопки управления интерфейсом */
+        .ui-controls {
+            position: absolute;
+            top: 80px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            pointer-events: all;
+            z-index: 850;
+        }
+
+        .ui-toggle-btn {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #4a006d, #9d00ff);
+            border: 2px solid #9d00ff;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+            font-size: 1.2em;
+        }
+
+        .ui-toggle-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(157, 0, 255, 0.8);
+        }
+
+        .ui-toggle-btn.active {
+            background: linear-gradient(45deg, #00ff00, #008800);
+            border-color: #00ff00;
+        }
+
+        .ui-toggle-btn.inactive {
+            background: linear-gradient(45deg, #ff4500, #ff8800);
+            border-color: #ff4500;
+        }
+
+        /* Кнопки быстрого доступа */
+        .quick-commands {
+            position: absolute;
+            bottom: 120px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+            pointer-events: all;
+            transition: opacity 0.3s;
+        }
+
+        .quick-commands.hidden {
+            opacity: 0.3;
+        }
+
+        .quick-command-btn {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #4a006d, #9d00ff);
+            border: 2px solid #9d00ff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+            font-size: 1.5em;
+        }
+
+        .quick-command-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(157, 0, 255, 0.8);
+        }
+
+        /* Кнопка открытия/скрытия меню строительства */
+        .build-menu-toggle {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(45deg, #9d00ff, #4a006d);
+            border: 3px solid #9d00ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            pointer-events: all;
+            z-index: 751;
+            transition: all 0.3s;
+            box-shadow: 0 0 20px rgba(157, 0, 255, 0.5);
+        }
+
+        .build-menu-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(157, 0, 255, 0.8);
+        }
+
+        .build-menu-toggle-icon {
+            font-size: 2.5em;
+            color: #fff;
+            transition: transform 0.3s;
+        }
+
+        .build-menu-toggle.active .build-menu-toggle-icon {
+            transform: rotate(180deg);
+        }
+
         /* Информационная панель */
         .info-panel {
             position: absolute;
@@ -274,6 +391,11 @@
             padding: 20px;
             pointer-events: all;
             backdrop-filter: blur(5px);
+            transition: opacity 0.3s;
+        }
+
+        .info-panel.hidden {
+            opacity: 0.3;
         }
 
         .info-title {
@@ -341,23 +463,68 @@
             font-size: 0.9em;
         }
 
+        /* Панель выбора */
+        .selection-panel {
+            position: absolute;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(26, 0, 51, 0.9);
+            border: 2px solid #9d00ff;
+            border-radius: 10px;
+            padding: 15px;
+            display: none;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            pointer-events: all;
+            backdrop-filter: blur(5px);
+            z-index: 800;
+        }
+
+        .selection-panel.active {
+            display: grid;
+        }
+
+        .selected-unit {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #4a006d, #9d00ff);
+            border: 2px solid #00ffff;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .selected-unit-icon {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+
+        .selected-unit-hp {
+            font-size: 0.7em;
+            color: #ff4500;
+        }
+
         /* Меню строительства */
         .build-menu {
             position: absolute;
-            bottom: -400px;
+            bottom: 0;
             left: 0;
             width: 100%;
             background: rgba(26, 0, 51, 0.95);
             border-top: 3px solid #9d00ff;
             padding: 20px;
-            transition: bottom 0.5s ease-in-out;
             backdrop-filter: blur(10px);
             pointer-events: all;
-            z-index: 750;
+            z-index: 749;
+            transition: transform 0.5s ease-in-out;
         }
 
-        .build-menu.active {
-            bottom: 0;
+        .build-menu.hidden {
+            transform: translateY(100%);
         }
 
         .build-menu-header {
@@ -578,7 +745,7 @@
 
         .controls-hint {
             position: absolute;
-            bottom: 20px;
+            bottom: 120px;
             left: 20px;
             background: rgba(26, 0, 51, 0.8);
             padding: 15px;
@@ -587,6 +754,11 @@
             font-size: 0.9em;
             color: #ccc;
             pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .controls-hint.hidden {
+            opacity: 0.3;
         }
 
         /* Индикатор выбора */
@@ -639,6 +811,42 @@
             width: 100%;
             transition: width 0.3s;
         }
+
+        /* Визуальные эффекты */
+        .attack-range-indicator {
+            position: absolute;
+            border: 2px solid rgba(255, 69, 0, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            display: none;
+            z-index: 400;
+        }
+
+        .patrol-line {
+            position: absolute;
+            border: 1px dashed #00ff00;
+            pointer-events: none;
+            display: none;
+            z-index: 400;
+        }
+
+        /* Уведомления */
+        .notification {
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(26, 0, 51, 0.9);
+            border: 2px solid #ff4500;
+            border-radius: 8px;
+            padding: 15px 30px;
+            color: #fff;
+            font-size: 1.1em;
+            text-align: center;
+            z-index: 1000;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
     </style>
 </head>
 <body>
@@ -647,7 +855,7 @@
         <!-- Заставка -->
         <div id="splash-screen">
             <div class="splash-title">KRIMPRODUCTION</div>
-            <div class="splash-subtitle">совместно с Огузок™</div>
+            <div class="splash-subtitle">совместно с Огузок™ и Алексей®</div>
             <div class="splash-tm">Warhammer 40 000 Universe</div>
         </div>
 
@@ -681,7 +889,7 @@
             
             <!-- Игровой интерфейс -->
             <div id="game-ui">
-                <div class="top-bar">
+                <div class="top-bar" id="top-bar">
                     <div class="resources">
                         <div class="resource">
                             <div class="resource-icon credits-icon">Ⱡ</div>
@@ -706,13 +914,34 @@
                     </div>
                 </div>
 
+                <!-- Кнопки управления интерфейсом -->
+                <div class="ui-controls" id="ui-controls">
+                    <div class="ui-toggle-btn" id="toggle-top-bar" title="Показать/скрыть верхнюю панель">📊</div>
+                    <div class="ui-toggle-btn" id="toggle-build-menu" title="Показать/скрыть меню строительства">🏗️</div>
+                    <div class="ui-toggle-btn" id="toggle-info-panel" title="Показать/скрыть информационную панель">ℹ️</div>
+                    <div class="ui-toggle-btn" id="toggle-quick-commands" title="Показать/скрыть быстрые команды">⚡</div>
+                    <div class="ui-toggle-btn" id="toggle-controls-hint" title="Показать/скрыть подсказки">❓</div>
+                </div>
+
+                <!-- Кнопки быстрого доступа -->
+                <div class="quick-commands" id="quick-commands">
+                    <div class="quick-command-btn" title="Выделить всех военных" id="select-all-military">⚔</div>
+                    <div class="quick-command-btn" title="Захватить все шахты" id="capture-mines">⛏</div>
+                    <div class="quick-command-btn" title="Вернуться к базе" id="return-to-base">🏠</div>
+                </div>
+
+                <!-- Кнопка открытия/скрытия меню строительства -->
+                <div class="build-menu-toggle" id="build-menu-toggle">
+                    <div class="build-menu-toggle-icon">▼</div>
+                </div>
+
                 <!-- Информационная панель -->
-                <div class="info-panel">
+                <div class="info-panel" id="info-panel">
                     <div class="info-title">СТРАТЕГИЧЕСКИЙ ДИСПЛЕЙ</div>
                     <div class="info-text">• Выделение: ЛКМ + драг</div>
                     <div class="info-text">• Перемещение: Выделить + ПКМ на карту</div>
-                    <div class="info-text">• Вращение стен: Выделить + R</div>
-                    <div class="info-text">• Меню строительства: M</div>
+                    <div class="info-text">• Вращение стен: Колёсико при строительстве</div>
+                    <div class="info-text">• Скрытие интерфейса: кнопки справа сверху</div>
                     
                     <div class="mine-status">
                         <div class="mine-item">
@@ -753,34 +982,47 @@
                     </div>
                 </div>
 
+                <!-- Панель выбранных юнитов -->
+                <div class="selection-panel" id="selection-panel"></div>
+
                 <!-- Индикатор размещения -->
                 <div class="drop-indicator" id="drop-indicator"></div>
 
                 <!-- Подсказки по управлению -->
-                <div class="controls-hint">
-                    WASD/Стрелки - движение камеры<br>
+                <div class="controls-hint" id="controls-hint">
+                    Стрелки - движение камеры<br>
                     Средняя кнопка + движение - вращение<br>
-                    Колесико - зум<br>
-                    M - меню строительства<br>
-                    R - вращение выбранного объекта
+                    Колесико - зум (кроме строительства стен)<br>
+                    ЛКМ + драг - выделение юнитов<br>
+                    ПКМ - перемещение выделенных юнитов<br>
+                    Ctrl + 1-9 - установить группу<br>
+                    1-9 - выбрать группу
                 </div>
 
                 <!-- Бокс выделения -->
                 <div class="selection-box" id="selection-box"></div>
+
+                <!-- Визуальные эффекты -->
+                <div class="attack-range-indicator" id="attack-range-indicator"></div>
+                <div class="patrol-line" id="patrol-line"></div>
+
+                <!-- Уведомления -->
+                <div class="notification" id="notification"></div>
             </div>
         </div>
 
-        <!-- Меню строительства -->
+        <!-- Меню строительства (по умолчанию видимо) -->
         <div class="build-menu" id="build-menu">
             <div class="build-menu-header">
                 <div class="build-title">МЕНЮ СТРОИТЕЛЬСТВА</div>
-                <button class="close-build-btn" id="close-build-btn">ЗАКРЫТЬ (M)</button>
+                <button class="close-build-btn" id="close-build-btn">СКРЫТЬ</button>
             </div>
             
             <div class="build-categories" id="build-categories">
                 <button class="category-btn active" data-category="units">ВОЙСКА</button>
                 <button class="category-btn" data-category="buildings">ЗДАНИЯ</button>
                 <button class="category-btn" data-category="defenses">ОБОРОНА</button>
+                <button class="category-btn" data-category="upgrades">УЛУЧШЕНИЯ</button>
             </div>
             
             <div class="build-items" id="build-items">
@@ -958,10 +1200,29 @@
                 this.waveTimerInterval = null;
                 this.buildQueue = [];
                 this.placingBuilding = null;
+                this.placingObject = null;
                 this.currentBuildCategory = 'units';
                 
                 this.hpBars = new Map();
                 this.selectionBox = document.getElementById('selection-box');
+                this.attackRangeIndicator = document.getElementById('attack-range-indicator');
+                this.patrolLine = document.getElementById('patrol-line');
+                this.notification = document.getElementById('notification');
+                
+                this.unitGroups = new Array(9).fill(null).map(() => []);
+                this.currentGroupKey = null;
+                
+                this.mineCaptureRange = 20;
+                this.patrolPoints = [];
+                
+                // Состояние видимости элементов интерфейса
+                this.uiVisibility = {
+                    topBar: true,
+                    buildMenu: true,
+                    infoPanel: true,
+                    quickCommands: true,
+                    controlsHint: true
+                };
             }
 
             static async start() {
@@ -1001,46 +1262,32 @@
 
             async init() {
                 try {
-                    console.log('Шаг 1: Заставка');
                     await SplashScreen.show();
                     
-                    console.log('Шаг 2: Загрузчик');
                     this.loader.show();
                     
-                    console.log('Шаг 3: Проверка Three.js');
                     if (typeof THREE === 'undefined') {
                         throw new Error('Three.js не загружен');
                     }
                     
-                    console.log('Шаг 4: Инициализация Three.js');
                     await this.loader.load("Загрузка графического движка...");
                     await this.initThreeJS();
                     
-                    console.log('Шаг 5: Инициализация игровых систем');
                     await this.loader.load("Настройка игровых систем...");
                     await this.initGameSystems();
                     
-                    console.log('Шаг 6: Создание игрового мира');
                     await this.loader.load("Создание игрового мира...");
                     await this.createGameWorld();
                     
-                    console.log('Шаг 7: Инициализация интерфейса');
                     await this.loader.load("Инициализация интерфейса...");
                     await this.initUI();
                     
-                    console.log('Шаг 8: Финальная подготовка');
                     await this.loader.load("Финальная подготовка...");
                     
-                    console.log('Шаг 9: Создание кат-сцены');
                     this.cutscene = new Cutscene();
                     
-                    console.log('Шаг 10: Загрузка завершена');
                     this.loader.hide();
-                    
-                    console.log('Шаг 11: Кат-сцена');
                     await this.cutscene.show();
-                    
-                    console.log('Шаг 12: Запуск игры');
                     await this.startGameplay();
                     
                 } catch (error) {
@@ -1159,7 +1406,12 @@
                         buildings: [],
                         walls: [],
                         mines: [],
-                        selectedUnits: []
+                        selectedUnits: [],
+                        upgrades: {
+                            skitariiWeapons: false,
+                            turretRange: false,
+                            dreadnoughtArmor: false
+                        }
                     };
                     
                     this.unitsData = {
@@ -1174,7 +1426,8 @@
                             sight: 60,
                             color: 0x9d00ff,
                             movable: true,
-                            buildTime: 5000
+                            buildTime: 5000,
+                            icon: '⚔'
                         },
                         turret: { 
                             cost: 500, 
@@ -1187,7 +1440,8 @@
                             sight: 100,
                             color: 0xffd700,
                             movable: false,
-                            buildTime: 10000
+                            buildTime: 10000,
+                            icon: '☢'
                         },
                         dreadnought: { 
                             cost: 1000, 
@@ -1200,7 +1454,8 @@
                             sight: 50,
                             color: 0xff4500,
                             movable: true,
-                            buildTime: 15000
+                            buildTime: 15000,
+                            icon: '⚙'
                         }
                     };
                     
@@ -1212,7 +1467,8 @@
                             unitLimitIncrease: 10,
                             color: 0x4a006d,
                             size: { width: 10, depth: 8 },
-                            buildTime: 20000
+                            buildTime: 20000,
+                            icon: '🏛'
                         },
                         wall: {
                             cost: 200,
@@ -1220,7 +1476,18 @@
                             maxHP: 300,
                             color: 0x666666,
                             size: { width: 5, depth: 2 },
-                            buildTime: 5000
+                            buildTime: 5000,
+                            icon: '🧱'
+                        },
+                        powerPlant: {
+                            cost: 800,
+                            hp: 400,
+                            maxHP: 400,
+                            powerIncrease: 100,
+                            color: 0x00ffff,
+                            size: { width: 8, depth: 8 },
+                            buildTime: 15000,
+                            icon: '⚡'
                         }
                     };
                     
@@ -1231,6 +1498,8 @@
                             damage: 15,
                             speed: 1.2,
                             sight: 50,
+                            attackRange: 2,
+                            aggressionRange: 80,
                             bounty: 50,
                             color: 0x00ff00
                         },
@@ -1240,8 +1509,42 @@
                             damage: 35,
                             speed: 0.8,
                             sight: 40,
+                            attackRange: 20,
+                            aggressionRange: 60,
                             bounty: 150,
                             color: 0xff8800
+                        },
+                        boss: {
+                            hp: 1000,
+                            maxHP: 1000,
+                            damage: 60,
+                            speed: 0.5,
+                            sight: 100,
+                            attackRange: 30,
+                            aggressionRange: 120,
+                            bounty: 500,
+                            color: 0xff0000
+                        }
+                    };
+                    
+                    this.upgradesData = {
+                        skitariiWeapons: {
+                            cost: 1000,
+                            name: 'Улучшенное оружие',
+                            description: '+30% урона Скитариям',
+                            icon: '🔫'
+                        },
+                        turretRange: {
+                            cost: 1500,
+                            name: 'Улучшенные сенсоры',
+                            description: '+40% дальности турелей',
+                            icon: '📡'
+                        },
+                        dreadnoughtArmor: {
+                            cost: 2000,
+                            name: 'Усиленная броня',
+                            description: '+50% HP Дредноутам',
+                            icon: '🛡️'
                         }
                     };
                     
@@ -1261,6 +1564,10 @@
                     ground.rotation.x = -Math.PI / 2;
                     ground.receiveShadow = true;
                     this.scene.add(ground);
+                    
+                    const gridHelper = new THREE.GridHelper(1000, 100, 0x444444, 0x222222);
+                    gridHelper.position.y = 0.1;
+                    this.scene.add(gridHelper);
                     
                     this.createBase();
                     this.createMines();
@@ -1354,7 +1661,8 @@
                         z: pos.z,
                         name: pos.name,
                         controlled: false,
-                        income: 50
+                        income: 50,
+                        captureProgress: 0
                     };
                     
                     this.gameState.mines.push(mine);
@@ -1386,10 +1694,209 @@
                 return new Promise((resolve) => {
                     document.getElementById('restart-btn').addEventListener('click', () => Game.restart());
                     
-                    this.setupControls();
+                    document.getElementById('select-all-military').addEventListener('click', () => this.selectAllMilitary());
+                    document.getElementById('capture-mines').addEventListener('click', () => this.orderCaptureMines());
+                    document.getElementById('return-to-base').addEventListener('click', () => this.orderReturnToBase());
+                    
+                    // Настройка кнопок управления интерфейсом
+                    this.setupUIControls();
+                    
                     this.setupBuildMenu();
+                    this.setupControls();
+                    
+                    // Применяем начальное состояние видимости интерфейса
+                    this.applyUIVisibility();
                     
                     resolve();
+                });
+            }
+
+            setupUIControls() {
+                // Кнопки переключения видимости элементов интерфейса
+                const uiControls = {
+                    'toggle-top-bar': { element: 'top-bar', key: 'topBar' },
+                    'toggle-build-menu': { element: 'build-menu', key: 'buildMenu' },
+                    'toggle-info-panel': { element: 'info-panel', key: 'infoPanel' },
+                    'toggle-quick-commands': { element: 'quick-commands', key: 'quickCommands' },
+                    'toggle-controls-hint': { element: 'controls-hint', key: 'controlsHint' }
+                };
+                
+                for (const [buttonId, config] of Object.entries(uiControls)) {
+                    const button = document.getElementById(buttonId);
+                    button.addEventListener('click', () => {
+                        this.uiVisibility[config.key] = !this.uiVisibility[config.key];
+                        this.updateUIButtonState(buttonId, config.key);
+                        this.toggleUIVisibility(config.element, config.key);
+                    });
+                    
+                    // Инициализация состояния кнопок
+                    this.updateUIButtonState(buttonId, config.key);
+                }
+            }
+
+            updateUIButtonState(buttonId, visibilityKey) {
+                const button = document.getElementById(buttonId);
+                const isVisible = this.uiVisibility[visibilityKey];
+                
+                button.classList.remove('active', 'inactive');
+                button.classList.add(isVisible ? 'active' : 'inactive');
+                
+                // Обновляем текст подсказки
+                button.title = isVisible ? 
+                    `Скрыть ${this.getUITitle(visibilityKey)}` : 
+                    `Показать ${this.getUITitle(visibilityKey)}`;
+            }
+
+            getUITitle(key) {
+                const titles = {
+                    'topBar': 'верхнюю панель',
+                    'buildMenu': 'меню строительства',
+                    'infoPanel': 'информационную панель',
+                    'quickCommands': 'быстрые команды',
+                    'controlsHint': 'подсказки'
+                };
+                return titles[key] || '';
+            }
+
+            toggleUIVisibility(elementId, visibilityKey) {
+                const element = document.getElementById(elementId);
+                const isVisible = this.uiVisibility[visibilityKey];
+                
+                if (elementId === 'build-menu') {
+                    // Для меню строительства используем класс hidden
+                    if (isVisible) {
+                        element.classList.remove('hidden');
+                    } else {
+                        element.classList.add('hidden');
+                    }
+                } else {
+                    // Для остальных элементов используем opacity или display
+                    if (element.classList.contains('hidden')) {
+                        element.classList.toggle('hidden', !isVisible);
+                    } else {
+                        element.style.opacity = isVisible ? '1' : '0.3';
+                        element.style.pointerEvents = isVisible ? 'all' : 'none';
+                    }
+                }
+            }
+
+            applyUIVisibility() {
+                // Применяем видимость для всех элементов
+                for (const [key, isVisible] of Object.entries(this.uiVisibility)) {
+                    const config = {
+                        'topBar': { element: 'top-bar', useClass: false },
+                        'buildMenu': { element: 'build-menu', useClass: true },
+                        'infoPanel': { element: 'info-panel', useClass: false },
+                        'quickCommands': { element: 'quick-commands', useClass: false },
+                        'controlsHint': { element: 'controls-hint', useClass: false }
+                    };
+                    
+                    if (config[key]) {
+                        const element = document.getElementById(config[key].element);
+                        if (config[key].useClass) {
+                            element.classList.toggle('hidden', !isVisible);
+                        } else {
+                            element.style.opacity = isVisible ? '1' : '0.3';
+                            element.style.pointerEvents = isVisible ? 'all' : 'none';
+                        }
+                    }
+                }
+                
+                // Обновляем состояние кнопок
+                this.updateAllUIButtons();
+            }
+
+            updateAllUIButtons() {
+                const uiControls = {
+                    'toggle-top-bar': 'topBar',
+                    'toggle-build-menu': 'buildMenu',
+                    'toggle-info-panel': 'infoPanel',
+                    'toggle-quick-commands': 'quickCommands',
+                    'toggle-controls-hint': 'controlsHint'
+                };
+                
+                for (const [buttonId, key] of Object.entries(uiControls)) {
+                    this.updateUIButtonState(buttonId, key);
+                }
+            }
+
+            setupBuildMenu() {
+                const buildMenuToggle = document.getElementById('build-menu-toggle');
+                const closeBtn = document.getElementById('close-build-btn');
+                const buildMenu = document.getElementById('build-menu');
+                
+                // По умолчанию меню строительства видимо
+                buildMenu.classList.remove('hidden');
+                this.uiVisibility.buildMenu = true;
+                
+                buildMenuToggle.addEventListener('click', () => {
+                    // Переключаем видимость меню строительства
+                    this.uiVisibility.buildMenu = !this.uiVisibility.buildMenu;
+                    this.toggleUIVisibility('build-menu', 'buildMenu');
+                    this.updateUIButtonState('toggle-build-menu', 'buildMenu');
+                    
+                    // Обновляем иконку на кнопке
+                    buildMenuToggle.classList.toggle('active', this.uiVisibility.buildMenu);
+                });
+                
+                closeBtn.addEventListener('click', () => {
+                    // Скрываем меню строительства
+                    this.uiVisibility.buildMenu = false;
+                    this.toggleUIVisibility('build-menu', 'buildMenu');
+                    this.updateUIButtonState('toggle-build-menu', 'buildMenu');
+                    buildMenuToggle.classList.remove('active');
+                });
+                
+                const categories = document.querySelectorAll('.category-btn');
+                categories.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        categories.forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        this.currentBuildCategory = btn.dataset.category;
+                        this.updateBuildItems();
+                    });
+                });
+                
+                this.updateBuildItems();
+            }
+
+            selectAllMilitary() {
+                this.clearSelection();
+                this.gameState.units.forEach(unit => {
+                    if (unit.userData.movable) {
+                        this.selectUnit(unit);
+                    }
+                });
+            }
+
+            orderCaptureMines() {
+                if (this.selectedUnits.length === 0) return;
+                
+                const minesToCapture = this.gameState.mines.filter(mine => !mine.controlled);
+                if (minesToCapture.length === 0) {
+                    this.showNotification('Все шахты уже захвачены!');
+                    return;
+                }
+                
+                minesToCapture.forEach((mine, index) => {
+                    const unit = this.selectedUnits[index % this.selectedUnits.length];
+                    if (unit && unit.userData.movable) {
+                        unit.userData.destination = new THREE.Vector3(mine.x, 0, mine.z);
+                        unit.userData.isMoving = true;
+                        unit.userData.task = 'capture';
+                    }
+                });
+                
+                this.showNotification('Отправляю войска на захват шахт!');
+            }
+
+            orderReturnToBase() {
+                this.selectedUnits.forEach(unit => {
+                    if (unit.userData.movable) {
+                        unit.userData.destination = new THREE.Vector3(0, 0, 0);
+                        unit.userData.isMoving = true;
+                        unit.userData.task = 'return';
+                    }
                 });
             }
 
@@ -1400,25 +1907,34 @@
                     const key = e.key.toLowerCase();
                     this.keys[key] = true;
                     
-                    // Меню строительства по клавише M
-                    if (key === 'm') {
-                        e.preventDefault();
-                        const buildMenu = document.getElementById('build-menu');
-                        buildMenu.classList.toggle('active');
-                        this.placingBuilding = null;
-                    }
-                    
-                    // Вращение выбранных объектов по клавише R
-                    if (key === 'r' && this.selectedUnits.length > 0) {
-                        e.preventDefault();
-                        this.rotateSelectedUnits();
-                    }
-                    
-                    // Отмена размещения по Escape
                     if (key === 'escape') {
-                        this.placingBuilding = null;
-                        const indicator = document.getElementById('drop-indicator');
-                        indicator.style.display = 'none';
+                        if (this.placingBuilding) {
+                            this.cancelPlacing();
+                        } else {
+                            this.clearSelection();
+                        }
+                    }
+                    
+                    // Сохранение групп (Ctrl + 1-9)
+                    if (e.ctrlKey && e.key >= '1' && e.key <= '9') {
+                        const groupIndex = parseInt(e.key) - 1;
+                        this.saveUnitGroup(groupIndex);
+                    }
+                    
+                    // Выбор групп (1-9)
+                    if (!e.ctrlKey && e.key >= '1' && e.key <= '9') {
+                        const groupIndex = parseInt(e.key) - 1;
+                        this.selectUnitGroup(groupIndex);
+                    }
+                    
+                    // Патрулирование (P)
+                    if (key === 'p') {
+                        this.startPatrolMode();
+                    }
+                    
+                    // Быстрое скрытие/показ интерфейса (H)
+                    if (key === 'h') {
+                        this.toggleAllUI();
                     }
                 });
                 
@@ -1432,7 +1948,7 @@
                 canvas.addEventListener('mousedown', (e) => {
                     if (!this.gameState?.gameActive) return;
                     
-                    if (e.button === 0) { // Левая кнопка мыши
+                    if (e.button === 0) {
                         if (this.placingBuilding) {
                             this.placeBuilding(e);
                         } else {
@@ -1440,10 +1956,26 @@
                             this.dragStart.x = e.clientX;
                             this.dragStart.y = e.clientY;
                             this.selectionBox.style.display = 'none';
+                            
+                            const rect = e.target.getBoundingClientRect();
+                            this.mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+                            this.mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+                            
+                            this.raycaster.setFromCamera(this.mouse, this.camera);
+                            const intersects = this.raycaster.intersectObjects([
+                                ...this.gameState.units,
+                                ...this.gameState.buildings
+                            ]);
+                            
+                            if (intersects.length > 0 && !this.keys.shift) {
+                                this.clearSelection();
+                                this.selectObject(intersects[0].object);
+                                this.dragging = false;
+                            }
                         }
                     }
                     
-                    if (e.button === 1) { // Средняя кнопка
+                    if (e.button === 1) {
                         e.preventDefault();
                         this.isRotating = true;
                         this.lastMousePosition.x = e.clientX;
@@ -1451,9 +1983,11 @@
                         canvas.style.cursor = 'grabbing';
                     }
                     
-                    if (e.button === 2) { // Правая кнопка
+                    if (e.button === 2) {
                         e.preventDefault();
-                        this.moveSelectedUnits(e);
+                        if (this.selectedUnits.length > 0) {
+                            this.moveSelectedUnits(e);
+                        }
                     }
                     
                     this.mouseButtons[e.button] = true;
@@ -1487,11 +2021,23 @@
                         this.lastMousePosition.y = e.clientY;
                     }
                     
-                    if (this.placingBuilding) {
-                        const indicator = document.getElementById('drop-indicator');
-                        indicator.style.left = (e.clientX - 20) + 'px';
-                        indicator.style.top = (e.clientY - 20) + 'px';
+                    if (this.placingObject) {
+                        const rect = e.target.getBoundingClientRect();
+                        this.mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+                        this.mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+                        
+                        this.raycaster.setFromCamera(this.mouse, this.camera);
+                        
+                        const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+                        const intersectionPoint = new THREE.Vector3();
+                        
+                        if (this.raycaster.ray.intersectPlane(plane, intersectionPoint)) {
+                            this.placingObject.position.x = intersectionPoint.x;
+                            this.placingObject.position.z = intersectionPoint.z;
+                        }
                     }
+                    
+                    this.updateAttackRangeIndicator(e);
                 });
                 
                 canvas.addEventListener('mouseup', (e) => {
@@ -1508,6 +2054,12 @@
                         canvas.style.cursor = 'default';
                     }
                     
+                    if (e.button === 2) {
+                        if (this.keys.shift && this.selectedUnits.length > 0) {
+                            this.addPatrolPoint(e);
+                        }
+                    }
+                    
                     this.mouseButtons[e.button] = false;
                 });
                 
@@ -1515,11 +2067,16 @@
                     if (!this.gameState?.gameActive) return;
                     e.preventDefault();
                     
-                    const zoomSpeed = 15;
-                    const delta = e.deltaY > 0 ? zoomSpeed : -zoomSpeed;
-                    
-                    this.cameraDistance = Math.max(50, Math.min(500, this.cameraDistance + delta));
-                    this.updateCameraPosition();
+                    if (this.placingBuilding === 'wall' && this.placingObject) {
+                        const delta = e.deltaY > 0 ? -0.1 : 0.1;
+                        this.placingObject.rotation.y += delta;
+                    } else {
+                        const zoomSpeed = 15;
+                        const delta = e.deltaY > 0 ? zoomSpeed : -zoomSpeed;
+                        
+                        this.cameraDistance = Math.max(50, Math.min(500, this.cameraDistance + delta));
+                        this.updateCameraPosition();
+                    }
                 });
                 
                 canvas.addEventListener('contextmenu', (e) => {
@@ -1527,25 +2084,44 @@
                 });
             }
 
-            setupBuildMenu() {
-                const closeBtn = document.getElementById('close-build-btn');
-                closeBtn.addEventListener('click', () => {
-                    const buildMenu = document.getElementById('build-menu');
-                    buildMenu.classList.remove('active');
-                    this.placingBuilding = null;
-                });
+            toggleAllUI() {
+                // Определяем, все ли элементы скрыты
+                const allHidden = Object.values(this.uiVisibility).every(visible => !visible);
                 
-                const categories = document.querySelectorAll('.category-btn');
-                categories.forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        categories.forEach(b => b.classList.remove('active'));
-                        btn.classList.add('active');
-                        this.currentBuildCategory = btn.dataset.category;
-                        this.updateBuildItems();
-                    });
-                });
+                // Если все скрыты - показываем все, иначе скрываем все
+                const newState = allHidden;
                 
-                this.updateBuildItems();
+                for (const key in this.uiVisibility) {
+                    this.uiVisibility[key] = newState;
+                }
+                
+                this.applyUIVisibility();
+                this.showNotification(newState ? 'Интерфейс показан' : 'Интерфейс скрыт');
+            }
+
+            updateAttackRangeIndicator(e) {
+                const rect = e.target.getBoundingClientRect();
+                this.mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+                this.mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+                
+                this.raycaster.setFromCamera(this.mouse, this.camera);
+                
+                const intersects = this.raycaster.intersectObjects(this.gameState.units);
+                if (intersects.length > 0 && intersects[0].object.userData.range) {
+                    const unit = intersects[0].object;
+                    const screenPos = unit.position.clone().project(this.camera);
+                    const x = (screenPos.x * 0.5 + 0.5) * window.innerWidth;
+                    const y = (-screenPos.y * 0.5 + 0.5) * window.innerHeight;
+                    
+                    const range = unit.userData.range * 2;
+                    this.attackRangeIndicator.style.left = (x - range) + 'px';
+                    this.attackRangeIndicator.style.top = (y - range) + 'px';
+                    this.attackRangeIndicator.style.width = range * 2 + 'px';
+                    this.attackRangeIndicator.style.height = range * 2 + 'px';
+                    this.attackRangeIndicator.style.display = 'block';
+                } else {
+                    this.attackRangeIndicator.style.display = 'none';
+                }
             }
 
             updateBuildItems() {
@@ -1564,12 +2140,41 @@
                         break;
                     case 'buildings':
                         items = [
-                            { type: 'barracks', name: 'Казармы', cost: 1000, icon: '🏛', requirements: 'Увеличивает лимит войск на 10' }
+                            { type: 'barracks', name: 'Казармы', cost: 1000, icon: '🏛', requirements: 'Увеличивает лимит войск на 10' },
+                            { type: 'powerPlant', name: 'Электростанция', cost: 800, icon: '⚡', requirements: '+100 к максимальной энергии' }
                         ];
                         break;
                     case 'defenses':
                         items = [
                             { type: 'wall', name: 'Стена', cost: 200, icon: '🧱', requirements: 'Блокирует проход врагам' }
+                        ];
+                        break;
+                    case 'upgrades':
+                        items = [
+                            { 
+                                type: 'skitariiWeapons', 
+                                name: 'Улучшенное оружие', 
+                                cost: 1000, 
+                                icon: '🔫', 
+                                requirements: '+30% урона Скитариям',
+                                purchased: this.gameState.upgrades.skitariiWeapons
+                            },
+                            { 
+                                type: 'turretRange', 
+                                name: 'Улучшенные сенсоры', 
+                                cost: 1500, 
+                                icon: '📡', 
+                                requirements: '+40% дальности турелей',
+                                purchased: this.gameState.upgrades.turretRange
+                            },
+                            { 
+                                type: 'dreadnoughtArmor', 
+                                name: 'Усиленная броня', 
+                                cost: 2000, 
+                                icon: '🛡️', 
+                                requirements: '+50% HP Дредноутам',
+                                purchased: this.gameState.upgrades.dreadnoughtArmor
+                            }
                         ];
                         break;
                 }
@@ -1579,19 +2184,28 @@
                     const canBuild = item.type === 'skitarii' || item.type === 'dreadnought' ? 
                         this.gameState.currentUnits < this.gameState.unitLimit : true;
                     
+                    const isPurchased = item.purchased === true;
+                    
                     const itemDiv = document.createElement('div');
-                    itemDiv.className = `build-item ${!canAfford || !canBuild ? 'disabled' : ''}`;
+                    itemDiv.className = `build-item ${!canAfford || !canBuild || isPurchased ? 'disabled' : ''}`;
                     itemDiv.innerHTML = `
                         <div class="build-icon">${item.icon}</div>
                         <div class="build-name">${item.name}</div>
                         <div class="build-cost">${item.cost} Ⱡ</div>
                         ${item.requirements ? `<div class="build-requirements">${item.requirements}</div>` : ''}
+                        ${isPurchased ? '<div style="color:#00ff00;margin-top:5px;">Куплено</div>' : ''}
                     `;
                     
-                    if (canAfford && canBuild) {
+                    if (canAfford && canBuild && !isPurchased) {
                         itemDiv.addEventListener('click', () => {
-                            this.startPlacingBuilding(item.type);
-                            document.getElementById('build-menu').classList.remove('active');
+                            if (item.type === 'skitariiWeapons' || item.type === 'turretRange' || item.type === 'dreadnoughtArmor') {
+                                this.purchaseUpgrade(item.type);
+                            } else {
+                                this.startPlacingBuilding(item.type);
+                                document.getElementById('build-menu').classList.remove('hidden');
+                                this.uiVisibility.buildMenu = true;
+                                this.updateUIButtonState('toggle-build-menu', 'buildMenu');
+                            }
                         });
                     }
                     
@@ -1599,11 +2213,92 @@
                 });
             }
 
+            purchaseUpgrade(type) {
+                const upgrade = this.upgradesData[type];
+                if (!upgrade) return;
+                
+                if (this.gameState.credits < upgrade.cost) {
+                    this.showNotification('Недостаточно кредитов!');
+                    return;
+                }
+                
+                this.gameState.credits -= upgrade.cost;
+                this.gameState.upgrades[type] = true;
+                
+                this.applyUpgrade(type);
+                this.updateUI();
+                this.updateBuildItems();
+                
+                this.showNotification(`Улучшение "${upgrade.name}" приобретено!`);
+            }
+
+            applyUpgrade(type) {
+                switch(type) {
+                    case 'skitariiWeapons':
+                        this.gameState.units.forEach(unit => {
+                            if (unit.userData.type === 'skitarii') {
+                                unit.userData.damage = Math.floor(unit.userData.damage * 1.3);
+                            }
+                        });
+                        break;
+                    case 'turretRange':
+                        this.gameState.units.forEach(unit => {
+                            if (unit.userData.type === 'turret') {
+                                unit.userData.range = Math.floor(unit.userData.range * 1.4);
+                            }
+                        });
+                        break;
+                    case 'dreadnoughtArmor':
+                        this.gameState.units.forEach(unit => {
+                            if (unit.userData.type === 'dreadnought') {
+                                unit.userData.maxHP = Math.floor(unit.userData.maxHP * 1.5);
+                                unit.userData.hp = Math.floor(unit.userData.hp * 1.5);
+                            }
+                        });
+                        break;
+                }
+            }
+
             startPlacingBuilding(type) {
                 this.placingBuilding = type;
+                
+                if (type === 'wall') {
+                    const wallData = this.buildingsData.wall;
+                    const geometry = new THREE.BoxGeometry(wallData.size.width, 4, wallData.size.depth);
+                    const material = new THREE.MeshBasicMaterial({
+                        color: wallData.color,
+                        transparent: true,
+                        opacity: 0.7
+                    });
+                    this.placingObject = new THREE.Mesh(geometry, material);
+                    this.placingObject.position.y = 2;
+                    this.scene.add(this.placingObject);
+                } else if (type === 'barracks' || type === 'powerPlant') {
+                    const buildingData = this.buildingsData[type];
+                    const geometry = new THREE.BoxGeometry(buildingData.size.width, 6, buildingData.size.depth);
+                    const material = new THREE.MeshBasicMaterial({
+                        color: buildingData.color,
+                        transparent: true,
+                        opacity: 0.7
+                    });
+                    this.placingObject = new THREE.Mesh(geometry, material);
+                    this.placingObject.position.y = 3;
+                    this.scene.add(this.placingObject);
+                }
+                
                 const indicator = document.getElementById('drop-indicator');
                 indicator.style.display = 'block';
                 indicator.style.backgroundColor = 'rgba(0, 255, 0, 0.2)';
+            }
+
+            cancelPlacing() {
+                if (this.placingObject) {
+                    this.scene.remove(this.placingObject);
+                    this.placingObject = null;
+                }
+                this.placingBuilding = null;
+                const indicator = document.getElementById('drop-indicator');
+                indicator.style.display = 'none';
             }
 
             placeBuilding(e) {
@@ -1623,20 +2318,29 @@
                     
                     if (distanceToBase > 30 && distanceToBase < 450) {
                         if (this.placingBuilding === 'wall') {
-                            this.createWall(intersectionPoint.x, intersectionPoint.z);
+                            this.createWall(
+                                this.placingObject.position.x, 
+                                this.placingObject.position.z, 
+                                this.placingObject.rotation.y
+                            );
                         } else if (this.placingBuilding === 'barracks') {
                             this.createBarracks(intersectionPoint.x, intersectionPoint.z);
+                        } else if (this.placingBuilding === 'powerPlant') {
+                            this.createPowerPlant(intersectionPoint.x, intersectionPoint.z);
                         } else {
                             this.createUnit(this.placingBuilding, intersectionPoint.x, intersectionPoint.z);
                         }
+                        
+                        this.scene.remove(this.placingObject);
+                        this.placingObject = null;
+                        this.placingBuilding = null;
+                        
+                        const indicator = document.getElementById('drop-indicator');
+                        indicator.style.display = 'none';
                     } else {
-                        alert('Нельзя строить слишком близко к базе или слишком далеко!');
+                        this.showNotification('Нельзя строить слишком близко к базе или слишком далеко!');
                     }
                 }
-                
-                this.placingBuilding = null;
-                const indicator = document.getElementById('drop-indicator');
-                indicator.style.display = 'none';
             }
 
             createUnit(type, x, z) {
@@ -1644,12 +2348,12 @@
                 if (!unitData) return null;
                 
                 if (this.gameState.credits < unitData.cost) {
-                    alert('Недостаточно кредитов!');
+                    this.showNotification('Недостаточно кредитов!');
                     return null;
                 }
                 
                 if (this.gameState.currentUnits >= this.gameState.unitLimit) {
-                    alert('Достигнут лимит войск! Постройте казармы для увеличения лимита.');
+                    this.showNotification('Достигнут лимит войск! Постройте казармы для увеличения лимита.');
                     return null;
                 }
                 
@@ -1679,12 +2383,27 @@
                 unit.castShadow = true;
                 unit.receiveShadow = true;
                 
+                // Применяем улучшения
+                let damage = unitData.damage;
+                let range = unitData.range;
+                let maxHP = unitData.hp;
+                
+                if (type === 'skitarii' && this.gameState.upgrades.skitariiWeapons) {
+                    damage = Math.floor(damage * 1.3);
+                }
+                if (type === 'turret' && this.gameState.upgrades.turretRange) {
+                    range = Math.floor(range * 1.4);
+                }
+                if (type === 'dreadnought' && this.gameState.upgrades.dreadnoughtArmor) {
+                    maxHP = Math.floor(maxHP * 1.5);
+                }
+                
                 unit.userData = {
                     type: type,
-                    hp: unitData.hp,
-                    maxHP: unitData.hp,
-                    damage: unitData.damage,
-                    range: unitData.range,
+                    hp: maxHP,
+                    maxHP: maxHP,
+                    damage: damage,
+                    range: range,
                     attackSpeed: unitData.attackSpeed,
                     speed: unitData.speed,
                     sight: unitData.sight,
@@ -1693,7 +2412,10 @@
                     target: null,
                     destination: null,
                     rotation: 0,
-                    isMoving: false
+                    isMoving: false,
+                    task: null,
+                    patrolIndex: 0,
+                    patrolPoints: []
                 };
                 
                 this.scene.add(unit);
@@ -1707,11 +2429,11 @@
                 return unit;
             }
 
-            createWall(x, z) {
+            createWall(x, z, rotation = 0) {
                 const wallData = this.buildingsData.wall;
                 
                 if (this.gameState.credits < wallData.cost) {
-                    alert('Недостаточно кредитов!');
+                    this.showNotification('Недостаточно кредитов!');
                     return;
                 }
                 
@@ -1724,6 +2446,7 @@
                 
                 const wall = new THREE.Mesh(geometry, material);
                 wall.position.set(x, 2, z);
+                wall.rotation.y = rotation;
                 wall.castShadow = true;
                 wall.receiveShadow = true;
                 
@@ -1731,7 +2454,7 @@
                     type: 'wall',
                     hp: wallData.hp,
                     maxHP: wallData.hp,
-                    rotation: 0
+                    rotation: rotation
                 };
                 
                 this.scene.add(wall);
@@ -1749,7 +2472,7 @@
                 const barracksData = this.buildingsData.barracks;
                 
                 if (this.gameState.credits < barracksData.cost) {
-                    alert('Недостаточно кредитов!');
+                    this.showNotification('Недостаточно кредитов!');
                     return;
                 }
                 
@@ -1781,6 +2504,43 @@
                 this.createHPBar(barracks);
                 
                 return barracks;
+            }
+
+            createPowerPlant(x, z) {
+                const powerPlantData = this.buildingsData.powerPlant;
+                
+                if (this.gameState.credits < powerPlantData.cost) {
+                    this.showNotification('Недостаточно кредитов!');
+                    return;
+                }
+                
+                const geometry = new THREE.BoxGeometry(powerPlantData.size.width, 6, powerPlantData.size.depth);
+                const material = new THREE.MeshStandardMaterial({
+                    color: powerPlantData.color,
+                    metalness: 0.6,
+                    roughness: 0.4
+                });
+                
+                const powerPlant = new THREE.Mesh(geometry, material);
+                powerPlant.position.set(x, 3, z);
+                powerPlant.castShadow = true;
+                powerPlant.receiveShadow = true;
+                
+                powerPlant.userData = {
+                    type: 'powerPlant',
+                    hp: powerPlantData.hp,
+                    maxHP: powerPlantData.hp
+                };
+                
+                this.scene.add(powerPlant);
+                this.gameState.buildings.push(powerPlant);
+                this.gameState.powerMax += powerPlantData.powerIncrease;
+                this.gameState.credits -= powerPlantData.cost;
+                
+                this.updateUI();
+                this.createHPBar(powerPlant);
+                
+                return powerPlant;
             }
 
             createHPBar(object) {
@@ -1821,7 +2581,11 @@
                 const y1 = Math.min(this.dragStart.y, e.clientY);
                 const y2 = Math.max(this.dragStart.y, e.clientY);
                 
-                this.clearSelection();
+                if (this.keys.shift) {
+                    // Добавляем к выделению
+                } else {
+                    this.clearSelection();
+                }
                 
                 this.gameState.units.forEach(unit => {
                     const position = unit.position.clone().project(this.camera);
@@ -1841,26 +2605,122 @@
                     }
                 });
                 this.selectedUnits = [];
+                this.updateSelectionPanel();
+            }
+
+            selectObject(object) {
+                if (object.userData.type === 'wall' || object.userData.type === 'barracks' || object.userData.type === 'powerPlant') {
+                    this.clearSelection();
+                    this.selectedUnits.push(object);
+                } else {
+                    this.selectUnit(object);
+                }
+                
+                if (object.material && object.material.emissive) {
+                    object.material.emissive.setHex(0x00ff00);
+                    object.material.emissiveIntensity = 0.3;
+                }
+                
+                this.updateSelectionPanel();
             }
 
             selectUnit(unit) {
-                if (unit.userData.type === 'wall' || unit.userData.type === 'barracks') {
-                    this.clearSelection();
-                }
-                
                 this.selectedUnits.push(unit);
                 if (unit.material && unit.material.emissive) {
                     unit.material.emissive.setHex(0x00ff00);
                     unit.material.emissiveIntensity = 0.3;
                 }
+                
+                this.updateSelectionPanel();
             }
 
-            rotateSelectedUnits() {
-                this.selectedUnits.forEach(unit => {
-                    if (unit.userData.type === 'wall') {
-                        unit.rotation.y += Math.PI / 2;
+            updateSelectionPanel() {
+                const panel = document.getElementById('selection-panel');
+                panel.innerHTML = '';
+                
+                if (this.selectedUnits.length === 0) {
+                    panel.classList.remove('active');
+                    return;
+                }
+                
+                panel.classList.add('active');
+                
+                this.selectedUnits.slice(0, 8).forEach(unit => {
+                    const unitDiv = document.createElement('div');
+                    unitDiv.className = 'selected-unit';
+                    unitDiv.innerHTML = `
+                        <div class="selected-unit-icon">${this.unitsData[unit.userData.type]?.icon || '?'}</div>
+                        <div class="selected-unit-hp">${unit.userData.hp}/${unit.userData.maxHP}</div>
+                    `;
+                    
+                    unitDiv.addEventListener('click', () => {
+                        this.clearSelection();
+                        this.selectUnit(unit);
+                    });
+                    
+                    panel.appendChild(unitDiv);
+                });
+            }
+
+            saveUnitGroup(index) {
+                if (this.selectedUnits.length === 0) return;
+                this.unitGroups[index] = [...this.selectedUnits];
+                this.showNotification(`Группа ${index + 1} сохранена (${this.selectedUnits.length} юнитов)`);
+            }
+
+            selectUnitGroup(index) {
+                if (!this.unitGroups[index] || this.unitGroups[index].length === 0) return;
+                
+                this.clearSelection();
+                this.unitGroups[index].forEach(unit => {
+                    if (unit.userData && unit.userData.hp > 0) {
+                        this.selectUnit(unit);
                     }
                 });
+                
+                // Удаляем мертвых юнитов из группы
+                this.unitGroups[index] = this.unitGroups[index].filter(unit => 
+                    unit.userData && unit.userData.hp > 0
+                );
+            }
+
+            startPatrolMode() {
+                if (this.selectedUnits.length === 0) return;
+                
+                this.patrolPoints = [];
+                this.showNotification('Режим патрулирования: Shift + ПКМ для установки точек, ПКМ для завершения');
+            }
+
+            addPatrolPoint(e) {
+                if (this.selectedUnits.length === 0) return;
+                
+                const rect = e.target.getBoundingClientRect();
+                this.mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+                this.mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+                
+                this.raycaster.setFromCamera(this.mouse, this.camera);
+                
+                const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+                const intersectionPoint = new THREE.Vector3();
+                
+                if (this.raycaster.ray.intersectPlane(plane, intersectionPoint)) {
+                    this.patrolPoints.push(intersectionPoint.clone());
+                    
+                    this.selectedUnits.forEach(unit => {
+                        if (unit.userData.movable) {
+                            unit.userData.patrolPoints = [...this.patrolPoints];
+                            unit.userData.patrolIndex = 0;
+                            unit.userData.task = 'patrol';
+                            
+                            if (unit.userData.patrolPoints.length > 0) {
+                                unit.userData.destination = unit.userData.patrolPoints[0];
+                                unit.userData.isMoving = true;
+                            }
+                        }
+                    });
+                    
+                    this.showNotification(`Точка патрулирования ${this.patrolPoints.length} установлена`);
+                }
             }
 
             moveSelectedUnits(e) {
@@ -1883,6 +2743,7 @@
                             if (unit.userData.movable) {
                                 unit.userData.destination = intersectionPoint.clone();
                                 unit.userData.isMoving = true;
+                                unit.userData.task = 'move';
                                 
                                 const offsetX = (Math.random() - 0.5) * 10;
                                 const offsetZ = (Math.random() - 0.5) * 10;
@@ -1950,6 +2811,7 @@
                     this.updateUnits();
                     this.updateEnemies();
                     this.updateBuildings();
+                    this.updateMines();
                     this.updateHPBars();
                     
                     if (this.gameState.baseHP <= 0) {
@@ -1978,19 +2840,19 @@
                     -Math.sin(this.cameraRotation.y)
                 ).normalize();
                 
-                if (this.keys['w'] || this.keys['arrowup']) {
+                if (this.keys['arrowup']) {
                     this.cameraTarget.add(forward.clone().multiplyScalar(moveSpeed));
                     this.updateCameraPosition();
                 }
-                if (this.keys['s'] || this.keys['arrowdown']) {
+                if (this.keys['arrowdown']) {
                     this.cameraTarget.add(forward.clone().multiplyScalar(-moveSpeed));
                     this.updateCameraPosition();
                 }
-                if (this.keys['a'] || this.keys['arrowleft']) {
+                if (this.keys['arrowleft']) {
                     this.cameraTarget.add(right.clone().multiplyScalar(-moveSpeed));
                     this.updateCameraPosition();
                 }
-                if (this.keys['d'] || this.keys['arrowright']) {
+                if (this.keys['arrowright']) {
                     this.cameraTarget.add(right.clone().multiplyScalar(moveSpeed));
                     this.updateCameraPosition();
                 }
@@ -2033,25 +2895,73 @@
                         continue;
                     }
                     
+                    // Захват шахт
+                    if (unit.userData.task === 'capture') {
+                        this.captureMines(unit);
+                    }
+                    
+                    // Патрулирование
+                    if (unit.userData.task === 'patrol' && unit.userData.patrolPoints.length > 0) {
+                        this.updatePatrol(unit);
+                    }
+                    
+                    // Движение к цели
                     if (unit.userData.isMoving && unit.userData.destination) {
                         const dx = unit.userData.destination.x - unit.position.x;
                         const dz = unit.userData.destination.z - unit.position.z;
                         const distance = Math.sqrt(dx * dx + dz * dz);
                         
-                        if (distance > 1) {
-                            unit.position.x += (dx / distance) * unit.userData.speed;
-                            unit.position.z += (dz / distance) * unit.userData.speed;
+                        if (distance > 2) {
+                            const moveDistance = unit.userData.speed;
+                            unit.position.x += (dx / distance) * moveDistance;
+                            unit.position.z += (dz / distance) * moveDistance;
                             
                             if (Math.abs(dx) > 0.1 || Math.abs(dz) > 0.1) {
                                 unit.rotation.y = Math.atan2(dx, dz);
                             }
                         } else {
                             unit.userData.isMoving = false;
-                            unit.userData.destination = null;
+                            if (unit.userData.task === 'patrol') {
+                                unit.userData.patrolIndex = (unit.userData.patrolIndex + 1) % unit.userData.patrolPoints.length;
+                                unit.userData.destination = unit.userData.patrolPoints[unit.userData.patrolIndex];
+                                unit.userData.isMoving = true;
+                            } else {
+                                unit.userData.destination = null;
+                                unit.userData.task = null;
+                            }
                         }
                     }
                     
                     this.unitAttack(unit);
+                }
+            }
+
+            captureMines(unit) {
+                this.gameState.mines.forEach(mine => {
+                    if (!mine.controlled) {
+                        const dx = unit.position.x - mine.x;
+                        const dz = unit.position.z - mine.z;
+                        const distance = Math.sqrt(dx * dx + dz * dz);
+                        
+                        if (distance < this.mineCaptureRange) {
+                            mine.captureProgress += 0.1;
+                            
+                            if (mine.captureProgress >= 1) {
+                                mine.controlled = true;
+                                mine.captureProgress = 1;
+                                this.gameState.controlledMines++;
+                                this.updateUI();
+                                this.showNotification(`Шахта ${mine.name} захвачена!`);
+                            }
+                        }
+                    }
+                });
+            }
+
+            updatePatrol(unit) {
+                if (!unit.userData.destination && unit.userData.patrolPoints.length > 0) {
+                    unit.userData.destination = unit.userData.patrolPoints[0];
+                    unit.userData.isMoving = true;
                 }
             }
 
@@ -2097,8 +3007,9 @@
                     }
                     
                     let target = null;
-                    let targetDistance = enemy.userData.sight;
+                    let targetDistance = enemy.userData.aggressionRange;
                     
+                    // Поиск цели в радиусе агрессии
                     this.gameState.units.forEach(unit => {
                         const distance = enemy.position.distanceTo(unit.position);
                         if (distance < targetDistance) {
@@ -2120,15 +3031,21 @@
                         const dz = target.position.z - enemy.position.z;
                         const distance = Math.sqrt(dx * dx + dz * dz);
                         
-                        if (distance > 2) {
+                        if (distance > enemy.userData.attackRange) {
                             enemy.position.x += (dx / distance) * enemy.userData.speed;
                             enemy.position.z += (dz / distance) * enemy.userData.speed;
                         } else if (target.userData.type !== 'wall') {
-                            target.userData.hp -= enemy.userData.damage;
+                            const currentTime = this.gameState.gameTime;
+                            if (currentTime - enemy.userData.lastAttack >= 60) {
+                                target.userData.hp -= enemy.userData.damage;
+                                enemy.userData.lastAttack = currentTime;
+                                this.createAttackEffect(enemy, target);
+                            }
                         }
                         
                         enemy.rotation.y = Math.atan2(dx, dz);
                     } else {
+                        // Движение к базе
                         const dx = 0 - enemy.position.x;
                         const dz = 0 - enemy.position.z;
                         const distance = Math.sqrt(dx * dx + dz * dz);
@@ -2136,6 +3053,7 @@
                         if (distance > 15) {
                             enemy.position.x += (dx / distance) * enemy.userData.speed;
                             enemy.position.z += (dz / distance) * enemy.userData.speed;
+                            enemy.rotation.y = Math.atan2(dx, dz);
                         } else {
                             this.gameState.baseHP -= enemy.userData.damage;
                             this.createDamageEffect(0, 20, 0);
@@ -2161,8 +3079,23 @@
                 });
             }
 
+            updateMines() {
+                this.gameState.mines.forEach(mine => {
+                    const element = document.getElementById(`mine-${mine.id + 1}`);
+                    if (element) {
+                        if (mine.controlled) {
+                            element.textContent = `Контролируется ${Math.floor(mine.captureProgress * 100)}%`;
+                            element.style.color = '#00ff00';
+                        } else {
+                            element.textContent = 'Свободна';
+                            element.style.color = '#fff';
+                        }
+                    }
+                });
+            }
+
             updateHPBars() {
-                [...this.gameState.units, ...this.gameState.walls, ...this.gameState.buildings].forEach(obj => {
+                [...this.gameState.units, ...this.gameState.walls, ...this.gameState.buildings, ...this.gameState.enemies].forEach(obj => {
                     this.updateHPBar(obj);
                 });
             }
@@ -2174,7 +3107,9 @@
                 ]);
                 
                 const material = new THREE.LineBasicMaterial({
-                    color: attacker.userData.type === 'turret' ? 0xffd700 : 0x00ffff,
+                    color: attacker.userData.type === 'turret' ? 0xffd700 : 
+                           attacker.userData.type === 'basic' ? 0x00ff00 :
+                           attacker.userData.type === 'heavy' ? 0xff8800 : 0xff0000,
                     transparent: true,
                     opacity: 0.6
                 });
@@ -2213,6 +3148,15 @@
                 animate();
             }
 
+            showNotification(message, duration = 3000) {
+                this.notification.textContent = message;
+                this.notification.style.display = 'block';
+                
+                setTimeout(() => {
+                    this.notification.style.display = 'none';
+                }, duration);
+            }
+
             startWaves() {
                 setTimeout(() => this.spawnWave(), 10000);
                 
@@ -2238,17 +3182,29 @@
             spawnWave() {
                 const enemyCount = 3 + Math.floor(this.gameState.currentWave * 1.5);
                 const heavyCount = Math.floor(this.gameState.currentWave / 3);
+                const bossCount = this.gameState.currentWave % 5 === 0 ? 1 : 0;
                 
+                let spawned = 0;
                 for (let i = 0; i < enemyCount; i++) {
                     setTimeout(() => {
                         if (!this.gameState?.gameActive) return;
                         
-                        const isHeavy = i < heavyCount;
-                        this.spawnEnemy(isHeavy ? 'heavy' : 'basic');
+                        let type = 'basic';
+                        if (spawned < heavyCount) {
+                            type = 'heavy';
+                        }
+                        if (bossCount > 0 && spawned === enemyCount - 1) {
+                            type = 'boss';
+                            this.showNotification('БОСС ПРИБЫВАЕТ!');
+                        }
+                        
+                        this.spawnEnemy(type);
+                        spawned++;
                     }, i * 800);
                 }
                 
                 document.getElementById('wave').textContent = this.gameState.currentWave;
+                this.showNotification(`Волна ${this.gameState.currentWave}!`);
             }
 
             spawnEnemy(type) {
@@ -2277,7 +3233,10 @@
                     damage: enemyType.damage,
                     speed: enemyType.speed,
                     sight: enemyType.sight,
-                    bounty: enemyType.bounty
+                    attackRange: enemyType.attackRange,
+                    aggressionRange: enemyType.aggressionRange,
+                    bounty: enemyType.bounty,
+                    lastAttack: 0
                 };
                 
                 this.scene.add(enemy);
@@ -2318,14 +3277,6 @@
                 document.getElementById('walls-count').textContent = this.gameState.wallsCount;
                 
                 this.updateBuildItems();
-                
-                this.gameState.mines.forEach(mine => {
-                    const element = document.getElementById(`mine-${mine.id + 1}`);
-                    if (element) {
-                        element.textContent = mine.controlled ? 'Контролируется' : 'Свободна';
-                        element.style.color = mine.controlled ? '#00ff00' : '#fff';
-                    }
-                });
             }
 
             onWindowResize() {
