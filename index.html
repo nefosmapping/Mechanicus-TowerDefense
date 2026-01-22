@@ -508,7 +508,7 @@
             color: #ff4500;
         }
 
-        /* Меню строительства */
+        /* Меню строительства - внутри игрового UI */
         .build-menu {
             position: absolute;
             bottom: 0;
@@ -520,11 +520,12 @@
             backdrop-filter: blur(10px);
             pointer-events: all;
             z-index: 749;
+            transform: translateY(100%);
             transition: transform 0.5s ease-in-out;
         }
 
-        .build-menu.hidden {
-            transform: translateY(100%);
+        .build-menu.visible {
+            transform: translateY(0);
         }
 
         .build-menu-header {
@@ -917,10 +918,10 @@
                 <!-- Кнопки управления интерфейсом -->
                 <div class="ui-controls" id="ui-controls">
                     <div class="ui-toggle-btn" id="toggle-top-bar" title="Показать/скрыть верхнюю панель">📊</div>
-                    <div class="ui-toggle-btn" id="toggle-build-menu" title="Показать/скрыть меню строительства">🏗️</div>
-                    <div class="ui-toggle-btn" id="toggle-info-panel" title="Показать/скрыть информационную панель">ℹ️</div>
-                    <div class="ui-toggle-btn" id="toggle-quick-commands" title="Показать/скрыть быстрые команды">⚡</div>
-                    <div class="ui-toggle-btn" id="toggle-controls-hint" title="Показать/скрыть подсказки">❓</div>
+                    <div class="ui-toggle-btn active" id="toggle-build-menu" title="Показать/скрыть меню строительства">🏗️</div>
+                    <div class="ui-toggle-btn active" id="toggle-info-panel" title="Показать/скрыть информационную панель">ℹ️</div>
+                    <div class="ui-toggle-btn active" id="toggle-quick-commands" title="Показать/скрыть быстрые команды">⚡</div>
+                    <div class="ui-toggle-btn active" id="toggle-controls-hint" title="Показать/скрыть подсказки">❓</div>
                 </div>
 
                 <!-- Кнопки быстрого доступа -->
@@ -931,7 +932,7 @@
                 </div>
 
                 <!-- Кнопка открытия/скрытия меню строительства -->
-                <div class="build-menu-toggle" id="build-menu-toggle">
+                <div class="build-menu-toggle active" id="build-menu-toggle">
                     <div class="build-menu-toggle-icon">▼</div>
                 </div>
 
@@ -985,6 +986,25 @@
                 <!-- Панель выбранных юнитов -->
                 <div class="selection-panel" id="selection-panel"></div>
 
+                <!-- Меню строительства (внутри игрового UI) -->
+                <div class="build-menu visible" id="build-menu">
+                    <div class="build-menu-header">
+                        <div class="build-title">МЕНЮ СТРОИТЕЛЬСТВА</div>
+                        <button class="close-build-btn" id="close-build-btn">СКРЫТЬ</button>
+                    </div>
+                    
+                    <div class="build-categories" id="build-categories">
+                        <button class="category-btn active" data-category="units">ВОЙСКА</button>
+                        <button class="category-btn" data-category="buildings">ЗДАНИЯ</button>
+                        <button class="category-btn" data-category="defenses">ОБОРОНА</button>
+                        <button class="category-btn" data-category="upgrades">УЛУЧШЕНИЯ</button>
+                    </div>
+                    
+                    <div class="build-items" id="build-items">
+                        <!-- Содержимое будет заполняться динамически -->
+                    </div>
+                </div>
+
                 <!-- Индикатор размещения -->
                 <div class="drop-indicator" id="drop-indicator"></div>
 
@@ -996,7 +1016,8 @@
                     ЛКМ + драг - выделение юнитов<br>
                     ПКМ - перемещение выделенных юнитов<br>
                     Ctrl + 1-9 - установить группу<br>
-                    1-9 - выбрать группу
+                    1-9 - выбрать группу<br>
+                    H - скрыть/показать весь интерфейс
                 </div>
 
                 <!-- Бокс выделения -->
@@ -1008,25 +1029,6 @@
 
                 <!-- Уведомления -->
                 <div class="notification" id="notification"></div>
-            </div>
-        </div>
-
-        <!-- Меню строительства (по умолчанию видимо) -->
-        <div class="build-menu" id="build-menu">
-            <div class="build-menu-header">
-                <div class="build-title">МЕНЮ СТРОИТЕЛЬСТВА</div>
-                <button class="close-build-btn" id="close-build-btn">СКРЫТЬ</button>
-            </div>
-            
-            <div class="build-categories" id="build-categories">
-                <button class="category-btn active" data-category="units">ВОЙСКА</button>
-                <button class="category-btn" data-category="buildings">ЗДАНИЯ</button>
-                <button class="category-btn" data-category="defenses">ОБОРОНА</button>
-                <button class="category-btn" data-category="upgrades">УЛУЧШЕНИЯ</button>
-            </div>
-            
-            <div class="build-items" id="build-items">
-                <!-- Содержимое будет заполняться динамически -->
             </div>
         </div>
 
@@ -1726,7 +1728,7 @@
                     button.addEventListener('click', () => {
                         this.uiVisibility[config.key] = !this.uiVisibility[config.key];
                         this.updateUIButtonState(buttonId, config.key);
-                        this.toggleUIVisibility(config.element, config.key);
+                        this.applyUIVisibility();
                     });
                     
                     // Инициализация состояния кнопок
@@ -1758,46 +1760,30 @@
                 return titles[key] || '';
             }
 
-            toggleUIVisibility(elementId, visibilityKey) {
-                const element = document.getElementById(elementId);
-                const isVisible = this.uiVisibility[visibilityKey];
-                
-                if (elementId === 'build-menu') {
-                    // Для меню строительства используем класс hidden
-                    if (isVisible) {
-                        element.classList.remove('hidden');
-                    } else {
-                        element.classList.add('hidden');
-                    }
-                } else {
-                    // Для остальных элементов используем opacity или display
-                    if (element.classList.contains('hidden')) {
-                        element.classList.toggle('hidden', !isVisible);
-                    } else {
-                        element.style.opacity = isVisible ? '1' : '0.3';
-                        element.style.pointerEvents = isVisible ? 'all' : 'none';
-                    }
-                }
-            }
-
             applyUIVisibility() {
                 // Применяем видимость для всех элементов
-                for (const [key, isVisible] of Object.entries(this.uiVisibility)) {
-                    const config = {
-                        'topBar': { element: 'top-bar', useClass: false },
-                        'buildMenu': { element: 'build-menu', useClass: true },
-                        'infoPanel': { element: 'info-panel', useClass: false },
-                        'quickCommands': { element: 'quick-commands', useClass: false },
-                        'controlsHint': { element: 'controls-hint', useClass: false }
-                    };
+                const elements = {
+                    'topBar': { element: 'top-bar', useOpacity: true },
+                    'buildMenu': { element: 'build-menu', useOpacity: false },
+                    'infoPanel': { element: 'info-panel', useOpacity: true },
+                    'quickCommands': { element: 'quick-commands', useOpacity: true },
+                    'controlsHint': { element: 'controls-hint', useOpacity: true }
+                };
+                
+                for (const [key, config] of Object.entries(elements)) {
+                    const element = document.getElementById(config.element);
+                    const isVisible = this.uiVisibility[key];
                     
-                    if (config[key]) {
-                        const element = document.getElementById(config[key].element);
-                        if (config[key].useClass) {
-                            element.classList.toggle('hidden', !isVisible);
+                    if (config.useOpacity) {
+                        element.style.opacity = isVisible ? '1' : '0.3';
+                        element.style.pointerEvents = isVisible ? 'all' : 'none';
+                        element.classList.toggle('hidden', !isVisible);
+                    } else {
+                        // Для меню строительства используем класс visible
+                        if (isVisible) {
+                            element.classList.add('visible');
                         } else {
-                            element.style.opacity = isVisible ? '1' : '0.3';
-                            element.style.pointerEvents = isVisible ? 'all' : 'none';
+                            element.classList.remove('visible');
                         }
                     }
                 }
@@ -1825,25 +1811,17 @@
                 const closeBtn = document.getElementById('close-build-btn');
                 const buildMenu = document.getElementById('build-menu');
                 
-                // По умолчанию меню строительства видимо
-                buildMenu.classList.remove('hidden');
-                this.uiVisibility.buildMenu = true;
-                
                 buildMenuToggle.addEventListener('click', () => {
-                    // Переключаем видимость меню строительства
                     this.uiVisibility.buildMenu = !this.uiVisibility.buildMenu;
-                    this.toggleUIVisibility('build-menu', 'buildMenu');
-                    this.updateUIButtonState('toggle-build-menu', 'buildMenu');
+                    this.applyUIVisibility();
                     
                     // Обновляем иконку на кнопке
                     buildMenuToggle.classList.toggle('active', this.uiVisibility.buildMenu);
                 });
                 
                 closeBtn.addEventListener('click', () => {
-                    // Скрываем меню строительства
                     this.uiVisibility.buildMenu = false;
-                    this.toggleUIVisibility('build-menu', 'buildMenu');
-                    this.updateUIButtonState('toggle-build-menu', 'buildMenu');
+                    this.applyUIVisibility();
                     buildMenuToggle.classList.remove('active');
                 });
                 
@@ -2202,9 +2180,6 @@
                                 this.purchaseUpgrade(item.type);
                             } else {
                                 this.startPlacingBuilding(item.type);
-                                document.getElementById('build-menu').classList.remove('hidden');
-                                this.uiVisibility.buildMenu = true;
-                                this.updateUIButtonState('toggle-build-menu', 'buildMenu');
                             }
                         });
                     }
